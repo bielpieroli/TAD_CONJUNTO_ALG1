@@ -1,4 +1,4 @@
-all: lista.o arvoreAVL.o
+all: set.o lista.o arvoreAVL.o
 	gcc set.o lista.o arvoreAVL.o main.c -o main -std=c99 -Wall -Werror -lm
 run:
 	./main

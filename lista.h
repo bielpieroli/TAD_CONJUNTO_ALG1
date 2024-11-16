@@ -2,6 +2,7 @@
     #define LISTA_H
     #define TAM_MAX 12
     #define ERRO -1
+    #define INF 100000010
     #include <stdbool.h>
 
     /* ESTE É O TAD LISTA */
@@ -15,16 +16,16 @@
 
     /* A função "lista_inserir", cujo retorno é do tipo booleano, é responsável por, a partir dos parâmetros recebidos (LISTA *lista: A LISTA
     EM QUE OCORRERÁ A INSERÇÃO, int *int: O int QUE SE DESEJA INSERIR), efetuar a inserção de um int.*/
-    bool lista_inserir(LISTA *lista, int *chave);
+    bool lista_inserir(LISTA *lista, int chave);
 
     /* A função "lista_remover", cujo retorno é do tipo int *, é responsável por, a partir dos parâmetros recebidos (LISTA 
     *lista: A LISTA EM QUE OCORRERÁ A REMOÇÃO, int pos: A POSIÇÃO DE QUE SE DESEJA REMOVER), efetuar, dada uma posição, 
     a remoção do int ali localizado. */
-    int *lista_remover(LISTA *lista, int pos);
+    int lista_remover(LISTA *lista, int pos);
 
     /* A função "lista_int", cujo retorno é do tipo int *, tem a função de retornar ao usuário o int da lista com uma
     determinada chave, recebida como parâmetro da função. */
-    int *lista_int(LISTA *lista, int pos);
+    int lista_int(LISTA *lista, int pos);
     
     /* A função "lista_tamanho", cujo o retorno é do tipo inteiro, é responsável por retornar o tamanho (a quantidade de elementos) dentro da lista em 
     questão.*/

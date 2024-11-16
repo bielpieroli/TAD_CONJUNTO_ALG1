@@ -65,10 +65,6 @@ int lista_busca(LISTA *lista, int val){
     int sup = lista->fim;
     // Declara a variável 'meio'
     int meio;
-    // Verifica se a lista está vazia, se sim, retorna o índice do lista->fim(0).
-    if(lista_vazia(lista)) {
-        return lista->fim;
-    }
 
     // Inicia-se um laço while que só terá fim quando o limite inferior ultrapassar o limite superior
     while (inf < sup) {
@@ -105,7 +101,7 @@ deslocamentos necessários.
 Complexidade: 0(N)
 No pior caso, a inserção acontece na primeira posição, sendo necessário deslocar todos os elementos.
 */
-bool lista_inserir_posicao(LISTA *lista, int pos, int *chave){
+bool lista_inserir_posicao(LISTA *lista, int pos, int chave){
     // Verifica se a lista existe e não está cheia e, a posição está dentro do limite da lista (0 a lista->fim são as únicas possíveis opções de inserção)
     if(!lista_cheia(lista) && pos >= 0 && pos <= lista->fim){
         // Percorre o vetor, de trás para frente, da posição final até a que se deseja inserir, fazendo os deslocamentos    
@@ -137,7 +133,7 @@ foi possível realizar a inserção.
 02) Se isso não se aplicar, a lista existe e há espaços vagos, desse modo, o item é inserido e retorna-se TRUE, indicando o sucesso. 
 Complexidade: 0(1)
 */
-bool lista_inserir_fim (LISTA *lista, int *chave) {
+bool lista_inserir_fim (LISTA *lista, int chave) {
     // Verificação se a lista existe e não está cheia.
     if(!lista_cheia(lista)){
         // Inserção na posição final (Lembrando que lista->fim é a próxima posição vaga, não o último elemento)
@@ -163,7 +159,7 @@ Complexidade:
 * ORDENADA: T(N) = LOG N + N --> O(N)
 * NÃO ORDENADA: O(1)
 */                                                                                                                                                                                                                                  
-bool lista_inserir(LISTA *lista, int *chave){      
+bool lista_inserir(LISTA *lista, int chave){      
     // Verifica se se trata de uma lista ordenada ou não com base no campo da struct LISTA, lista->ordenada                                                                                                                                                                                           
     if(lista->ordenada){              
         // A variável 'x' recebe o inteiro que indica a posição ideal de inserção.                                                                                                                                                                                                               
@@ -178,26 +174,26 @@ bool lista_inserir(LISTA *lista, int *chave){
 }        
 
 /*
-A função "lista_remover", cujo retorno é do tipo ITEM *, é responsável por, a partir dos parâmetros recebidos (LISTA 
+A função "lista_remover", cujo retorno é do tipo int, é responsável por, a partir dos parâmetros recebidos (LISTA 
 *lista: A LISTA EM QUE OCORRERÁ A REMOÇÃO, int pos: A POSIÇÃO DE QUE SE DESEJA REMOVER), efetuar, dada uma posição, 
-a remoção do item ali localizado. Como se trata de uma lista sequencial, para mantê-la organizada após uma remoção, é
-necessário fazer deslocamentos para fechar o espaço do item retirado, retomando para que a lista fique contínua. A
+a remoção do elemento ali localizado. Como se trata de uma lista sequencial, para mantê-la organizada após uma remoção, é
+necessário fazer deslocamentos para fechar o espaço do elemento retirado, retomando para que a lista fique contínua. A
 quantidade de deslocamentos a ser realizada é descrita por lista->fim-1-pos.
 01) Caso a lista não exista ou esteja vazia (verificações de "lista_vazia"), ou se a posição de remoção não estiver nos
-limites da lista, é retornado NULL.
-02) Caso contrário, a lista existe, há algum item nela e a posição está adequada, o item é retirado, os delocamentos são
-feitos para mantê-la organizada, então, o item 'it' pode ser retornado.
+limites da lista, é retornado INF, uma costante de controle.
+02) Caso contrário, a lista existe, há algum elemento nela e a posição está adequada, ele é retirado, os delocamentos são
+feitos para mantê-la organizada, então, o inteiro que foi retirado pode ser retornado.
 Complexidade: O(N)
 No pior caso, a remoção acontece na primeira posição, de modo que é necessário deslocar todos os elementos
 */
-int *lista_remover(LISTA *lista, int pos){
+int lista_remover(LISTA *lista, int pos){
     // Verificação se a lista não existe ou está vazia ou se a posição de remoção não está nos limites da lista
-    if (lista_vazia(lista) || pos<0 || pos > lista->fim) {
+    if (lista_vazia(lista) || pos<0 || pos > lista->fim-1) {
         // É retornado NULL, mostrando que não foi possível remover.
-        return NULL;
+        return INF;
     }
     // A variável 'it' passa a apontar para o item da posição desejada.
-    int *chave = lista->chaves[pos];
+    int chave = lista->chaves[pos];
     // Percorre o vetor da posição em que se removeu até o o último elemento (lista->fim-1), fazendo os deslocamentos
     for (int j = pos; j < lista->fim - 1; j++) {
         // O item na posição 'j' recebe o valor do próximo item 'j+1'.                                                                                                                      
@@ -215,14 +211,14 @@ int *lista_remover(LISTA *lista, int pos){
 }
 
 /*
-A função "lista_item", cujo retorno é do tipo ITEM *, tem a função de retornar ao usuário o item da lista com uma
+A função "lista_int", cujo retorno é do tipo int, tem a função de retornar ao usuário o inteiro da lista com uma
 determinada chave, recebida como parâmetro da função.
-01) Caso a lista não exista ou o item procurado não existe na lista, é retornado NULL.
+01) Caso a lista não exista ou o item procurado não existe na lista, é retornado INF, uma constante.
 02) Caso contrário a lista existe e foi encontrado, a partir da função "lista_busca" (Tem que ter retornado 'meio')
 e a comparação se a chave é a mesma, o respectivo item é retornado, mas não é removido da lista.
 Complexidade: O(LOG N) para lista ordenada, O(N) para não ordenada.
 */
-int *lista_item(LISTA *lista, int chave) {
+int lista_int(LISTA *lista, int chave) {
     // Verificação se a lista existe
     if(lista != NULL) {
         if(lista->ordenada) {
@@ -231,12 +227,12 @@ int *lista_item(LISTA *lista, int chave) {
             // Caso de "lista_busca" retornar o fim da lista, indicativo de que o item não existe
             if(i >= lista->fim) {
                 // Retorna NULL, mostrando que o item não existe
-                return NULL;
+                return INF;
             }
             // Verificação para ver se a posição retornada pelo "lista_busca" é de um item com a mesma chave(Retornou 'meio')
             if(chave != (lista->chaves[i]) ) {
                 // Retorna NULL, mostrando que não há um item com aquela chave na lista.
-                return NULL;
+                return INF;
             }
             // O item com a chave almejada é retornado.
             return (lista->chaves[i]);
@@ -246,12 +242,12 @@ int *lista_item(LISTA *lista, int chave) {
         for(i = 0; i<lista->fim && (lista->chaves[i])!= chave; i++);
         
         if(i==lista->fim) {
-            return NULL;
+            return INF;
         }
         return lista->chaves[i];    
     }
     // Retorna NULL se a lista não existe
-    return NULL;
+    return INF;
 }
 
 /* 
@@ -328,9 +324,8 @@ void lista_apagar(LISTA **lista) {
     // O for percorre toda a lista, da posição de início até o último elemento, localizado em lista->fim-1
     for (int i = (*lista)->inicio; i < (*lista)->fim; i++) {
         // A variável 'it', do tipo ITEM *, passa a apontar para o endereço do item de cada iteração
-        int *chave = (*lista)->chaves[(*lista)->inicio + i];
+        int chave = (*lista)->chaves[(*lista)->inicio + i];
         // Apaga cada um dos itens que estavam dentro da lista, liberando a sua memória
-        free(chave);
     }
     // Depois de liberada a memória de cada item, a memória da estrutura pode ser liberada.
     free(*lista);
