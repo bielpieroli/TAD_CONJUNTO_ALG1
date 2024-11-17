@@ -1,43 +1,57 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "arvoreAVL.h"
-#include "lista.h"
+#include <stdbool.h>
 #include "set.h"
 
 
 int main() {
-    // Vamos supor que o usuário escolhe a implementação com lista
-    int escolha = 1;  
+    int escolha;
+    scanf("%d", &escolha);  
 
-    // Criação do conjunto
-    SET *conjunto = criar_set(escolha);
+    // Criação do set
+    SET *conjunto = set_criar(escolha);
     if (conjunto == NULL) {
-        printf("Erro ao criar o conjunto\n");
+        printf("Erro ao criar o set\n");
         return 1;
     }
 
-    // Inserir elementos no conjunto
-    inserir_set(conjunto, 10);
-    inserir_set(conjunto, 20);
-    inserir_set(conjunto, 30);
-    inserir_set(conjunto, 40);
 
-    imprimir_set(conjunto);
-    // Verificar se um elemento pertence ao conjunto
-    if (pertence_set(conjunto, 20)) {
-        printf("20 pertence ao conjunto\n");
+    set_inserir(conjunto, 10);
+    set_inserir(conjunto, 20);
+    set_inserir(conjunto, 30);
+    set_inserir(conjunto, 40);
+
+    set_imprimir(conjunto);
+
+
+    if (set_pertence(conjunto, 20)) {
+        printf("%d pertence ao set\n", 20);
     } else {
-        printf("20 não pertence ao conjunto\n");
+        printf("%d não pertence ao set\n", 20);
     }
 
-    // Remover um elemento do conjunto
-    remover_set(conjunto, 10);
+    if (set_pertence(conjunto, 60)) {
+        printf("%d pertence ao set\n", 60);
+    } else {
+        printf("%d não pertence ao set\n", 60);
+    }
 
-    // Imprimir elementos do conjunto
-    imprimir_set(conjunto);
+    if(set_remover(conjunto, 10)) {
+        printf("%d foi removido\n", 10);
+    } else {
+        printf("%d não está no set\n", 10);
+    }
 
-    // Apagar o conjunto e liberar memória
-    destruir_set(&conjunto);
+    if(set_remover(conjunto, 50)) {
+        printf("%d foi removido\n", 50);
+    } else {
+        printf("%d não está no set\n", 50);
+    }
+    // Imprimir elementos do set
+    set_imprimir(conjunto);
+
+    // Apagar o set e liberar memória
+    set_apagar(&conjunto);
 
     return 0;
 }
