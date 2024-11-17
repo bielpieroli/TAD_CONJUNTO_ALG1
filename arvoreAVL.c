@@ -126,6 +126,10 @@ void AVL_pos_ordem(AVL* avl) {
 }
 
 void rotacaoLL(NO** raiz) {
+    if (*raiz == NULL || (*raiz)->esq == NULL) {
+        printf("Erro: não há nó à esquerda para rotação\n");
+        return;  // Retorna sem fazer nada se não houver nó à esquerda
+    }
     NO* aux = (*raiz)->esq;
     (*raiz)->esq = aux->dir;
     aux->dir = *raiz;

@@ -186,29 +186,30 @@ feitos para mantê-la organizada, então, o inteiro que foi retirado pode ser re
 Complexidade: O(N)
 No pior caso, a remoção acontece na primeira posição, de modo que é necessário deslocar todos os elementos
 */
-int lista_remover(LISTA *lista, int pos){
-    // Verificação se a lista não existe ou está vazia ou se a posição de remoção não está nos limites da lista
-    if (lista_vazia(lista) || pos<0 || pos > lista->fim-1) {
-        // É retornado NULL, mostrando que não foi possível remover.
-        return INF;
+bool lista_remover(LISTA *lista, int chave) {
+    // Verificação se a lista não existe ou está vazia
+    if (lista_vazia(lista)) {
+        return false;
     }
-    // A variável 'it' passa a apontar para o item da posição desejada.
-    int chave = lista->chaves[pos];
-    // Percorre o vetor da posição em que se removeu até o o último elemento (lista->fim-1), fazendo os deslocamentos
+    int pos = lista->inicio;
+    // Busca pela chave na lista
+    while (pos < lista->fim && lista->chaves[pos] != chave) {
+        pos++;
+    }
+    // Se a chave não foi encontrada, retorna false
+    if (pos == lista->fim) {
+        return false;
+    }
+    // Desloca os elementos após a posição 'pos' uma posição à esquerda
     for (int j = pos; j < lista->fim - 1; j++) {
-        // O item na posição 'j' recebe o valor do próximo item 'j+1'.                                                                                                                      
         lista->chaves[j] = lista->chaves[j + 1];
     }
-    // Terminado o laço 'for', agora o vetor se encontra organizado novamente.
-    
-    // Como um item foi retirado, lista->fim é decrementado.
+    // Decrementa 'fim' e 'tamanho' após a remoção
     lista->fim--;
-    // Como um item foi retirado, lista->tamanho (a quantidade de elementos) é decrementado.
     lista->tamanho--;
-
-    // O item que foi retirado da lista é retornado ao usuário.
-    return chave;
+    return true;
 }
+
 
 /*
 A função "lista_int", cujo retorno é do tipo int, tem a função de retornar ao usuário o inteiro da lista com uma

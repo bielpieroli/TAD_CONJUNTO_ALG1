@@ -12,7 +12,7 @@
     SET *criar_set(int escolha);
 
     // Função para destruir o conjunto e liberar toda a memória alocada
-    void destruir_set(SET *set);
+    void destruir_set(SET **set);
 
     // Função para inserir um elemento no conjunto
     bool inserir_set(SET *set, int elemento);

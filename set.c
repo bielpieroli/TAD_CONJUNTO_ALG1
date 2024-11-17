@@ -12,7 +12,7 @@ struct SET_ {
     bool (*remover)(SET *, int elemento);
     bool (*pertence)(SET *, int elemento);
     void (*imprimir)(SET *);
-    void (*destruir)(SET *);
+    void (*destruir)(SET **);
     void *implementacao; 
 }; 
 
@@ -29,22 +29,27 @@ SET *criar_set(int escolha) {
         set->remover = (bool (*)(SET *, int))lista_remover;
         set->pertence = (bool (*)(SET *, int))lista_int;
         set->imprimir = (void (*)(SET *))lista_imprimir;
-        set->destruir = (void (*)(SET *))lista_apagar;
-
-        set->implementacao = lista_criar(true); // Lista ordenada
-    } else {
-        printf("Implementação não suportada\n");
-        free(set);
-        return NULL;
+        set->destruir = (void (*)(SET **))lista_apagar;
+        set->implementacao = lista_criar(true); 
+    } else if (escolha == 1) {
+        set->inserir = (bool (*)(SET *, int))AVL_inserir;
+        set->remover = (bool (*)(SET *, int))AVL_remover;
+        set->pertence = (bool (*)(SET *, int))AVL_consulta;
+        set->imprimir = (void (*)(SET *))AVL_em_ordem;
+        set->destruir = (void (*)(SET **))AVL_apagar;
+        set->implementacao = AVL_criar();
     }
+
 
     return set;
 }
 
-void destruir_set(SET *set) {
-    if (set) {
-        set->destruir(set->implementacao);
-        free(set);
+void destruir_set(SET **set) {
+    if (*set != NULL) {
+         (*set)->destruir((SET **)&(*set)->implementacao); 
+        
+        free(*set); 
+        *set = NULL;  
     }
 }
 

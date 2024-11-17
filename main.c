@@ -7,7 +7,7 @@
 
 int main() {
     // Vamos supor que o usuário escolhe a implementação com lista
-    int escolha = 0;  
+    int escolha = 1;  
 
     // Criação do conjunto
     SET *conjunto = criar_set(escolha);
@@ -20,7 +20,9 @@ int main() {
     inserir_set(conjunto, 10);
     inserir_set(conjunto, 20);
     inserir_set(conjunto, 30);
+    inserir_set(conjunto, 40);
 
+    imprimir_set(conjunto);
     // Verificar se um elemento pertence ao conjunto
     if (pertence_set(conjunto, 20)) {
         printf("20 pertence ao conjunto\n");
@@ -35,7 +37,7 @@ int main() {
     imprimir_set(conjunto);
 
     // Apagar o conjunto e liberar memória
-    destruir_set(conjunto);
+    destruir_set(&conjunto);
 
     return 0;
 }

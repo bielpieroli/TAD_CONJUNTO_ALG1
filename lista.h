@@ -1,6 +1,6 @@
 #ifndef LISTA_H
     #define LISTA_H
-    #define TAM_MAX 12
+    #define TAM_MAX 200
     #define ERRO -1
     #define INF 100000010
     #include <stdbool.h>
@@ -21,7 +21,7 @@
     /* A função "lista_remover", cujo retorno é do tipo int *, é responsável por, a partir dos parâmetros recebidos (LISTA 
     *lista: A LISTA EM QUE OCORRERÁ A REMOÇÃO, int pos: A POSIÇÃO DE QUE SE DESEJA REMOVER), efetuar, dada uma posição, 
     a remoção do int ali localizado. */
-    int lista_remover(LISTA *lista, int pos);
+    bool lista_remover(LISTA *lista, int pos);
 
     /* A função "lista_int", cujo retorno é do tipo int *, tem a função de retornar ao usuário o int da lista com uma
     determinada chave, recebida como parâmetro da função. */
