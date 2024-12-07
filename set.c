@@ -35,7 +35,7 @@ SET *set_criar(unsigned char escolha) {
         set->inserir = (bool (*)(SET *, int))AVL_inserir;
         set->remover = (bool (*)(SET *, int))AVL_remover;
         set->pertence = (bool (*)(SET *, int))AVL_consulta;
-        set->imprimir = (void (*)(SET *))AVL_em_ordem;
+        set->imprimir = (void (*)(SET *))print_arvore;
         set->apagar = (void (*)(SET **))AVL_apagar;
         set->implementacao = AVL_criar();
     } else {
@@ -67,13 +67,11 @@ bool set_pertence(SET *set, int elemento) {
 }
 
 SET *set_uniao(SET *A, SET *B) {
-    SET *resultado;
-    return resultado;
+
 }
 
 SET *set_intersecao(SET *A, SET *B) {
-    SET *resultado = criar_set()
-    return resultado;
+
 }
 
 void set_imprimir(SET *set) {
