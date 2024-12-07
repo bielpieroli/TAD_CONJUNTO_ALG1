@@ -8,5 +8,5 @@
 
     //retorna true se o elemento está presente na árvore, e false caso contrário
     bool RBT_busca(RBT *tree, int dado);
-
+    bool RBT_remover(RBT *tree, int chave);
 #endif

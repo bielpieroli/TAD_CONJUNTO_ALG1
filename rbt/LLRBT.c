@@ -127,3 +127,46 @@ bool RBT_busca(RBT *tree, int dado){
     if(!tree) return false;
     return RBT_busca_aux(tree->raiz, dado);
 }
+
+NODE *move_red_left(NODE *no) {
+    inverte(no);
+    if (vermelho(no->dir->esq)) {
+        no->dir = rotacao_direita(no->dir);
+        no = rotacao_esquerda(no);
+        inverte(no);
+    }
+    return no;
+}
+
+NODE *move_red_right(NODE *no) {
+    inverte(no);
+    if (vermelho(no->esq->esq)) {
+        no = rotacao_direita(no);
+        inverte(no);
+    }
+    return no;
+}
+
+NODE *RBT_remover_aux(NODE *no, int chave){
+    if(!no) return NULL;
+
+    //busca da subarvore correta
+    if(chave < no->valor){
+        if(no->esq && vermelho(no->esq) && !vermelho(no->esq->esq)) {
+            //mover vvermelho a direita
+        }
+    }
+}
+
+bool RBT_remover(RBT *tree, int chave) {
+    if (!tree || !tree->raiz) return false;
+
+    //chamada da recursao
+    tree->raiz = RBT_remover_aux(tree->raiz, chave);
+
+    if (tree->raiz) {
+        tree->raiz->cor = 0; // a raiz sempre eh da cor preta
+    }
+
+    return true;
+}
