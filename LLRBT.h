@@ -3,6 +3,6 @@
     typedef struct red_black_tree RBT;
 
     RBT *RBT_criar();
-    bool *RBT_inserir(RBT *tree, int item);
+    bool *RBT_inserir(RBT *tree, int dado);
 
 #endif

@@ -74,8 +74,10 @@ NODE *rotacao_esquerda(NODE *a){
 NODE *inserir_node(NODE *h, int valor){
     //busca do local a ser inserido
     if(!h) return criar_node(valor);
-    if(valor < h->valor) return inserir_node(h->esq, valor);
-    else if(valor > h->valor) return inserir_node(h->dir, valor);
+    if(valor < h->valor) 
+        h->esq = inserir_node(h->esq, valor);
+    else if(valor > h->valor) 
+        h->dir = inserir_node(h->dir, valor);
 
     //correção das regras quebradas
     if(!vermelho(h->esq) && vermelho (h->dir)){
@@ -91,8 +93,25 @@ NODE *inserir_node(NODE *h, int valor){
     return h;
 }
 
-bool *RBT_inserir(RBT *tree, int item){
+bool *RBT_inserir(RBT *tree, int dado){
     if(!tree) return false;
+    NODE* no = inserir_node(tree->raiz, dado);
+    tree->tam++;
+    tree->raiz = no;
+    tree->raiz->cor = 0; //a raiz da arvore sempre é preta
+    return true;
+}
 
+void percurso_em_ordem_aux(NODE *no){
+    if(!no) return;
+    percurso_em_ordem_aux(no->esq);
+    printf("%d ", no->valor);
+    percurso_em_ordem_aux(no->dir);
+}
 
+void percurso_em_ordem(RBT *tree){
+    if(!tree) return;
+    printf("Percurso: ");
+    percurso_em_ordem_aux(tree->raiz);
+    printf("\n");
 }
