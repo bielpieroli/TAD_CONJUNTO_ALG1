@@ -235,14 +235,15 @@ void AVL_troca_no_max_esq(NO* troca, NO *raiz, NO *ant) {
     troca = NULL;
 }
 
-NO *AVL_no_remover(NO** raiz, int chave) {
+NO *AVL_no_remover(NO** raiz, int chave, bool *existe) {
     if (*raiz == NULL) { // Valor não encontrado
         //printf("Chave não encontrada!\n");
+        *existe = false;
         return NULL;
     } else if (chave < (*raiz)->chave) {
-        (*raiz)->esq = AVL_no_remover(&(*raiz)->esq, chave);
+        (*raiz)->esq = AVL_no_remover(&(*raiz)->esq, chave, existe);
     } else if (chave > (*raiz)->chave) {
-        (*raiz)->dir = AVL_no_remover(&(*raiz)->dir, chave);
+        (*raiz)->dir = AVL_no_remover(&(*raiz)->dir, chave, existe);
     } else if (chave == (*raiz)->chave) { // Encontrou o nó a ser removido
         NO *aux;
         if ((*raiz)->esq == NULL || (*raiz)->dir == NULL) { // Nó com 1 ou nenhum filho
@@ -279,20 +280,17 @@ bool AVL_remover(AVL* avl, int chave) {
     if (avl == NULL) {
         return false;
     }
-    if (AVL_consulta(avl, chave)) {
-        NO* pos_remocao = AVL_no_remover(&(avl->raiz), chave);
-        bool resultado;
-        if (pos_remocao == NULL) {
-            resultado = false;
-        } else {
-            avl->raiz = pos_remocao;
-            avl->profundidade = AVL_altura(avl);
-            resultado = true;
-        }
-        return resultado;
+    bool existe = true;
+    NO* pos_remocao = AVL_no_remover(&(avl->raiz), chave, &existe);
+    bool resultado;
+    if (pos_remocao == NULL || !existe) {
+        resultado = false;
     } else {
-        return false;
+        avl->raiz = pos_remocao;
+        avl->profundidade = AVL_altura(avl);
+        resultado = true;
     }
+    return resultado;
 }
 
 
@@ -310,7 +308,7 @@ bool no_consulta(NO* no, int chave) {
 
 bool AVL_consulta(AVL* avl, int chave) {
     if (avl == NULL || avl->raiz == NULL)
-        return 0;
+        return false;
     return no_consulta(avl->raiz, chave);
 }
 
@@ -320,7 +318,6 @@ void print_espacos(int nivel) {
         printf("    "); 
     }
 }
-
 
 void print_estrutura(NO* raiz, int nivel) {
     if (raiz == NULL) {
