@@ -1,57 +1,63 @@
+#include "set.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include "set.h"
 
+int main(int argc, char *argv[])
+{
+    SET *A, *B;
+    int n_a, n_b, x;
+    int op;
+    int tipo;
 
-int main() {
-    int escolha;
-    scanf("%d", &escolha);  
+    scanf("%d", &tipo); /*0 -> ED1, 1 -> ED2*/
 
-    // Criação do set
-    SET *conjunto = set_criar(escolha);
-    if (conjunto == NULL) {
-        printf("Erro ao criar o set\n");
-        return 1;
+    A = set_criar(tipo);
+    B = set_criar(tipo);
+
+    scanf("%d %d", &n_a, &n_b);
+
+    for (int i = 0; i < n_a; i++)
+    {
+        scanf("%d", &x);
+        set_inserir(A, x);
     }
 
-
-    set_inserir(conjunto, 10);
-    set_inserir(conjunto, 20);
-    set_inserir(conjunto, 30);
-    set_inserir(conjunto, 40);
-
-    set_imprimir(conjunto);
-
-
-    if (set_pertence(conjunto, 20)) {
-        printf("%d pertence ao set\n", 20);
-    } else {
-        printf("%d não pertence ao set\n", 20);
+    for (int i = 0; i < n_b; i++)
+    {
+        scanf("%d", &x);
+        set_inserir(B, x);
     }
 
-    if (set_pertence(conjunto, 60)) {
-        printf("%d pertence ao set\n", 60);
-    } else {
-        printf("%d não pertence ao set\n", 60);
+    scanf("%d", &op);
+    switch (op) {
+        case 1:
+        {
+            scanf("%d", &x);
+            set_pertence(A,x) ? printf("Pertence.\n") : printf("Não pertence.\n");
+            break;
+        }
+        case 2:
+        {
+            SET *C = set_uniao(A, B);
+            set_imprimir(C);
+            set_apagar(&C);
+            break;
+        }
+        case 3:
+        {
+            SET *C = set_intersecao(A, B);
+            set_imprimir(C);
+            set_apagar(&C);
+            break;
+        }
+        case 4:
+        {
+            scanf("%d", &x);
+            set_remover(A, x);
+            set_imprimir(A);
+        }
     }
-
-    if(set_remover(conjunto, 10)) {
-        printf("%d foi removido\n", 10);
-    } else {
-        printf("%d não está no set\n", 10);
-    }
-
-    if(set_remover(conjunto, 50)) {
-        printf("%d foi removido\n", 50);
-    } else {
-        printf("%d não está no set\n", 50);
-    }
-    // Imprimir elementos do set
-    set_imprimir(conjunto);
-
-    // Apagar o set e liberar memória
-    set_apagar(&conjunto);
-
+    set_apagar(&A);
+    set_apagar(&B);
     return 0;
 }
