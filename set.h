@@ -1,14 +1,19 @@
-#include <stdbool.h>
 #ifndef SET_H
     #define SET_H
 
+    // ESTE É O TAD SET_H
+
+    #include <stdbool.h>
+    #include "arvoreAVL.h" 
+    #include "LLRBT.h"
+
+    // Typedef do nome da struct, para passar utilizar a nomenclatura SET
     typedef struct SET_ SET;
 
-
-    // Função para criar o TAD SET, permitindo escolher a implementação (lista ou árvore)
+    // Função para criar o TAD SET, conforme a escolha da implementação entre duas estruturas de dados (Árvore AVL ou Red-Black Tree))
     // Parâmetro 'escolha': 
-    //    - 0 para implementar o conjunto com lista
-    //    - 1 para implementar o conjunto com árvore binária
+    //    - 0 para implementar o conjunto com Árvore AVL
+    //    - 1 para implementar o conjunto com Red-Black Tree
     SET *set_criar(unsigned char escolha);
 
     // Função para inserir um elemento no conjunto
@@ -32,4 +37,4 @@
     // Função para imprimir os elementos do conjunto
     void set_imprimir(SET *set);
 
-#endif // SET_H
+#endif 

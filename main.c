@@ -32,12 +32,15 @@ int main(int argc, char *argv[])
     switch (op) {
         case 1:
         {
+            set_imprimir(A);
             scanf("%d", &x);
             set_pertence(A,x) ? printf("Pertence.\n") : printf("Não pertence.\n");
             break;
         }
         case 2:
         {
+            set_imprimir(A);
+            set_imprimir(B);
             SET *C = set_uniao(A, B);
             set_imprimir(C);
             set_apagar(&C);
@@ -45,6 +48,8 @@ int main(int argc, char *argv[])
         }
         case 3:
         {
+            set_imprimir(A);
+            set_imprimir(B);
             SET *C = set_intersecao(A, B);
             set_imprimir(C);
             set_apagar(&C);
@@ -52,6 +57,7 @@ int main(int argc, char *argv[])
         }
         case 4:
         {
+            set_imprimir(A);
             scanf("%d", &x);
             set_remover(A, x);
             set_imprimir(A);

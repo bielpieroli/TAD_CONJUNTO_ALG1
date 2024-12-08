@@ -9,6 +9,6 @@ lista.o:
 arvoreAVL.o:
 	gcc -c arvoreAVL.c -o arvoreAVL.o
 clean:
-	rm -f *.o main caixa.zip
+	rm -f *.o main conjunto.zip
 zip:
-	zip -r caixa.zip *
+	zip -r conjunto.zip *

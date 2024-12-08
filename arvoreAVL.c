@@ -446,3 +446,56 @@ void print_arvore(AVL *T) {
     printf("Árvore AVL:\n");
     print_estrutura(T->raiz, 0);
 }
+
+NO* no_inserir_uniao(AVL *C, NO *elemento) {
+    if(elemento != NULL) {
+        if(!AVL_consulta(C, elemento->chave)) {
+            if(!AVL_inserir(C, elemento->chave)) {
+                printf("Erro na inserção do elemento %d", elemento->chave);
+            }
+        }
+        C->raiz = no_inserir_uniao(C, elemento->esq);
+        C->raiz = no_inserir_uniao(C, elemento->dir);
+    }
+    return C->raiz;
+}
+
+AVL *AVL_uniao(AVL *A, AVL *B) {
+    AVL *C = AVL_criar();
+
+    if(A != NULL && A->raiz != NULL) {
+        C->raiz = no_inserir_uniao(C, A->raiz);
+    }
+    if(B != NULL && B->raiz != NULL) {
+        C->raiz = no_inserir_uniao(C, B->raiz);
+    }
+
+    C->profundidade = AVL_altura(C);
+
+    return C;
+}
+
+NO* no_inserir_intersecao(AVL *C, AVL *A, NO *elemento) {
+    if(elemento != NULL) {
+        if(AVL_consulta(A, elemento->chave)) {
+            if(!AVL_inserir(C, elemento->chave)) {
+                printf("Erro na inserção do elemento %d", elemento->chave);
+            }
+        }
+        C->raiz = no_inserir_intersecao(C, A, elemento->esq);
+        C->raiz = no_inserir_intersecao(C, A, elemento->dir);
+    }
+    return C->raiz;
+}
+
+AVL *AVL_intersecao(AVL *A, AVL *B) {
+    AVL *C = AVL_criar();
+
+    if(A != NULL && A->raiz != NULL && B != NULL && B->raiz != NULL) {
+        C->raiz = no_inserir_intersecao(C, A, B->raiz);
+    }
+
+    C->profundidade = AVL_altura(C);
+
+    return C;
+}
