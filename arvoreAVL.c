@@ -183,6 +183,7 @@ void AVL_pos_ordem(AVL* avl) {
     if (avl != NULL)
         no_pos_ordem(avl->raiz);
 }
+
 /// @brief Função que realiza a Rotação Esquerda
 /// @param A 
 /// @return Retorna a sub-árvore rotacionada à esquerda
@@ -312,7 +313,6 @@ bool AVL_inserir(AVL* avl, int chave) {
     if (avl == NULL) {
         return false;
     }
-    // Analisa caso a raiz retornada seja nula, indicando que a inserção não foi executada com sucesso
     NO* pos_insercao = AVL_no_inserir(avl->raiz, chave);
     bool resultado = false;
     // Caso tenha sido bem sucedida, a raiz da estrutura auxiliar recebe a árvore pós inserção, atualiza a profundidade e retorna true
@@ -346,18 +346,27 @@ void AVL_troca_no_max_esq(NO* troca, NO *raiz, NO *ant) {
     troca = NULL;
 }
 
+/// @brief Função auxiliar que percorre recursivamente a árvore em busca da chave que será removida
+/// @param raiz 
+/// @param chave 
+/// @param existe 
+/// @return NO *, isto é, retorna a raiz, após terminadas as chamadas recursivas e feita a remoção
 NO *AVL_no_remover(NO** raiz, int chave, bool *existe) {
-    if (*raiz == NULL) { // Valor não encontrado
-        //printf("Chave não encontrada!\n");
+    // Valor não encontrado
+    if (*raiz == NULL) { 
         *existe = false;
         return NULL;
+    // Percorre a árvore à esquerda caso a chave seja menor que o chave do nó atual
     } else if (chave < (*raiz)->chave) {
         (*raiz)->esq = AVL_no_remover(&(*raiz)->esq, chave, existe);
+    // Percorre a árvore à esquerda caso a chave seja menor que o chave do nó atual
     } else if (chave > (*raiz)->chave) {
         (*raiz)->dir = AVL_no_remover(&(*raiz)->dir, chave, existe);
-    } else if (chave == (*raiz)->chave) { // Encontrou o nó a ser removido
+    // Encontrou o nó a ser removido
+    } else if (chave == (*raiz)->chave) { 
         NO *aux;
-        if ((*raiz)->esq == NULL || (*raiz)->dir == NULL) { // Nó com 1 ou nenhum filho
+        // Nó com 1 ou nenhum filho
+        if ((*raiz)->esq == NULL || (*raiz)->dir == NULL) { 
             aux = *raiz;
             if ((*raiz)->esq != NULL)
                 *raiz = (*raiz)->esq;
@@ -365,37 +374,54 @@ NO *AVL_no_remover(NO** raiz, int chave, bool *existe) {
                 *raiz = (*raiz)->dir;
             free(aux);
             aux = NULL;
-        } else { // Nó com 2 filhos
+        // Nó com 2 filhos
+        } else { 
             AVL_troca_no_max_esq((*raiz)->esq,(*raiz), (*raiz));
         }
     }
+    // Na volta da recursão são feitos os ajustes:
     if (*raiz != NULL) {
+        // A altura de cada nó é atualizada
         (*raiz)->alt = max(no_altura((*raiz)->esq), no_altura((*raiz)->dir)) + 1;
+        // Para este caso do fator de balanceamento, a árvore pende à direita, necessita-se de uma rotação à esquerda
         if (fator_de_balanceamento(*raiz) >= 2) { 
+            // Caso o fator de balanceamento do filho à direita seja de igual sinal ou nulo, faz-se rotação simples à esquerda
             if (fator_de_balanceamento((*raiz)->esq) >= 0)
                 *raiz = rotacaoR(*raiz); 
+            // Do contrário, faz-se rotação dupla, à direita e, por fim, à esquerda
             else
                 *raiz = rotacaoLR(*raiz); 
         }
+        // Para este caso do fator de balanceamento, a árvore pende à esquerda, necessita-se de uma rotação à direita
         if (fator_de_balanceamento(*raiz) <= -2) { 
+            // Caso o fator de balanceamento do filho à esquerda seja de igual sinal ou nulo, faz-se rotação simples à direita
             if (fator_de_balanceamento((*raiz)->dir) <= 0)
                 *raiz = rotacaoL(*raiz); 
+             // Do contrário, faz-se rotação dupla, à esquerda e, por fim, à direita
             else
                 *raiz = rotacaoRL(*raiz); 
         }
     }
+    // Feito tudo isso, recursivamente, retorna-se eventualmente a raiz com a remoção e todos os ajustes feitos
     return *raiz;
 }
 
+/// @brief Função que realiza a remoção de uma chave em um nó da árvore AVL
+/// @param avl 
+/// @param chave 
+/// @return bool, ou seja, se foi possível ou não realizar a remoção daquela chave na árvore AVL
 bool AVL_remover(AVL* avl, int chave) {
+    // Caso a estrutura AVL não exista, não é possível
     if (avl == NULL) {
         return false;
     }
     bool existe = true;
     NO* pos_remocao = AVL_no_remover(&(avl->raiz), chave, &existe);
     bool resultado;
+    // Analisa caso a raiz retornada seja nula, indicando que a remoção não foi executada com sucesso
     if (pos_remocao == NULL || !existe) {
         resultado = false;
+    // Caso tenha sido bem sucedida e o elemento existia na estrutura, a raiz antiga recebe a raiz pós inserção, atualiza a profundidade e retorna true
     } else {
         avl->raiz = pos_remocao;
         avl->profundidade = AVL_altura(avl);
@@ -405,6 +431,10 @@ bool AVL_remover(AVL* avl, int chave) {
 }
 
 
+/// @brief Função auxiliar que percorre os nós iterativamente em busca da chave desejada
+/// @param no 
+/// @param chave 
+/// @return false: se a chave não existia. true: se a chave existia 
 bool no_consulta(NO* no, int chave) {
     while (no != NULL) {
         if (chave == no->chave)
@@ -417,34 +447,14 @@ bool no_consulta(NO* no, int chave) {
     return false;
 }
 
+/// @brief Função que verifica se uma dada chave existe dentro da AVL
+/// @param avl 
+/// @param chave 
+/// @return false: se a chave não existia na estrutura. true: se a chave existia na estrutura
 bool AVL_consulta(AVL* avl, int chave) {
     if (avl == NULL || avl->raiz == NULL)
         return false;
     return no_consulta(avl->raiz, chave);
-}
-
-
-void print_espacos(int nivel) {
-    for (int i = 0; i < nivel; i++) {
-        printf("    "); 
-    }
-}
-
-void print_estrutura(NO* raiz, int nivel) {
-    if (raiz == NULL) {
-        print_espacos(nivel);
-        printf("~\n"); 
-        return;
-    }
-    print_estrutura(raiz->dir, nivel + 1);
-    print_espacos(nivel);
-    printf("%d\n", raiz->chave);
-    print_estrutura(raiz->esq, nivel + 1);
-}
-
-void print_arvore(AVL *T) {
-    printf("Árvore AVL:\n");
-    print_estrutura(T->raiz, 0);
 }
 
 NO* no_inserir_uniao(AVL *C, NO *elemento) {
@@ -460,6 +470,10 @@ NO* no_inserir_uniao(AVL *C, NO *elemento) {
     return C->raiz;
 }
 
+/// @brief Função que constrói o conjunto união entre dois conjuntos A e B
+/// @param A 
+/// @param B 
+/// @return AVL *, isto é, o conjunto C, fruto da união entre A e B
 AVL *AVL_uniao(AVL *A, AVL *B) {
     AVL *C = AVL_criar();
 
@@ -475,6 +489,11 @@ AVL *AVL_uniao(AVL *A, AVL *B) {
     return C;
 }
 
+/// @brief Função auxiliar que percorre a árvore recursivamente e insere em C os elementos que pertencem tanto a A, quanto a B
+/// @param C 
+/// @param A 
+/// @param elemento 
+/// @return NO *, ou seja, retorna eventualmente a raiz 
 NO* no_inserir_intersecao(AVL *C, AVL *A, NO *elemento) {
     if(elemento != NULL) {
         if(AVL_consulta(A, elemento->chave)) {
@@ -488,6 +507,10 @@ NO* no_inserir_intersecao(AVL *C, AVL *A, NO *elemento) {
     return C->raiz;
 }
 
+/// @brief Função que constrói o conjunto interseção entre dois dados conjuntos
+/// @param A 
+/// @param B 
+/// @return AVL *, ou seja, retorna o conjunto C, interseção entre A e B
 AVL *AVL_intersecao(AVL *A, AVL *B) {
     AVL *C = AVL_criar();
 
@@ -498,4 +521,34 @@ AVL *AVL_intersecao(AVL *A, AVL *B) {
     C->profundidade = AVL_altura(C);
 
     return C;
+}
+
+/// @brief Função auxiliar que contabiliza os espaços por nível
+/// @param nivel 
+void print_espacos(int nivel) {
+    for (int i = 0; i < nivel; i++) {
+        printf("    "); 
+    }
+}
+
+/// @brief Função auxiliar que printa a estrutura da árvore, com arestas e chaves.
+/// @param raiz 
+/// @param nivel 
+void print_estrutura(NO* raiz, int nivel) {
+    if (raiz == NULL) {
+        print_espacos(nivel);
+        printf("~\n"); 
+        return;
+    }
+    print_estrutura(raiz->dir, nivel + 1);
+    print_espacos(nivel);
+    printf("%d\n", raiz->chave);
+    print_estrutura(raiz->esq, nivel + 1);
+}
+
+/// @brief Função de debug para verificar como estava ficando a estrutura da árvore
+/// @param T 
+void print_arvore(AVL *T) {
+    printf("Árvore AVL:\n");
+    print_estrutura(T->raiz, 0);
 }

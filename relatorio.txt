@@ -1,0 +1,45 @@
+Relatório - Trabalho 2 - Algoritmos e Estuturas de dados
+Dante Brito Lourenço - 15447326 e João Gabriel Pieroli da Silva - 15678578
+
+Para a implementação do TAD Conjunto, escolhemos duas estruturas de dados balanceadas: 
+LLRBT (Left-Leaning Red-Black Tree) e AVL Tree. Ambas são árvores de busca binária 
+autobalanceadas que oferecem excelente desempenho para as operações necessárias, garantindo 
+eficiência superior em comparação com estruturas como listas encadeadas.
+
+Justificativa para a escolha das estruturas de dados:
+
+Red-Black Tree
+A Red-Black Tree é uma estrutura de dados que mantém um balanceamento próximo ao ideal, 
+garantindo que a profundidade da árvore seja no máximo 2log(n+1).
+As operações de inserção e remoção têm desempenho eficiente devido à sua estratégia de 
+balanceamento menos rigorosa, o que resulta em menos rotações comparado à AVL.
+Todas as operações principais, sendo busca, inserção e remoção, possuem complexidade 
+O(log(n)), independentemente da ordem de inserção dos elementos.
+
+Árvore AVL
+A Árvore AVL é uma estrutura de dados que garante um balanceamento estrito, mantendo a diferença
+de altura entre subárvores adjacentes sempre menor ou igual a 1. Devido ao balanceamento mais 
+rigoroso, a AVL Tree tem desempenho levemente melhor em operações de busca, pois a altura é minimizada.
+É ideal para situações onde a frequência de consultas (buscas) é maior que a de inserções e remoções.
+
+
+Apesar das diferenças entre si, ambas são árvores de busca binária balanceadas, o que permite que as 
+operações específicas sejam realizadas da maneira mais eficiente possível. 
+PERTENCE:
+Para essa operação estamos fazendo uma busca simples do elemento pela árvore, o que pode ser equivalente
+a percorrer a altura máxima da árvore. Conhecendo as propriedades de suas alturas, na RBT temos uma 
+complexidade máxima de O(2log(n+1)), e na AVL temos O(log(n)+1). Dessa forma, embora tenham complexidades
+assintóticas equivalentes, a AVL possui um desempenho melhor para essa operação.
+
+UNIÃO:
+Em ambas as estruturas, foi implementado o método da seguinte maneira: Faça um percurso pela árvore A,
+e adicione estes elementos em C, e repita o mesmo processo para B. Como as estruturas não permitem
+réplicas, isso resulta em uma união. Considerando que os percursos A e B realizam n e m iterações 
+respectivamente, e cada inserção em C terá uma complexidade máxima de O(2log(n+1)) para a RBT e 
+O(log(n)+1) para a AVL,temos que a complexidade final é:
+
+O(n + m + n*2log(n+1) + m*2log(m+1)) para a RBT
+O(n + m + n*(log(n)+1) + m*(log(m)+1)) para a AVL
+
+INTERSEÇÃO:
+
