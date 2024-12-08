@@ -12,7 +12,7 @@
     bool RBT_inserir(RBT *tree, int dado);
 
     // Faz um percurso em ordem e printa o dado de cada nó
-    void percurso_em_ordem(RBT *tree);
+    void RBT_imprimir(RBT *tree);
 
     // Retorna true se o elemento está presente na árvore, e false caso contrário
     bool RBT_busca(RBT *tree, int dado);
@@ -22,5 +22,5 @@
     bool RBT_remover(RBT *tree, int chave);
 
     RBT *RBT_uniao(RBT *A, RBT *B);
-    RBT *RBT_intersec(RBT *A, RBT *B);
+    RBT *RBT_intersecao(RBT *A, RBT *B);
 #endif

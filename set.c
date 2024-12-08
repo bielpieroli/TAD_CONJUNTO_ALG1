@@ -13,6 +13,7 @@ struct SET_ {
     SET *(*uniao) (SET *, SET *);
     SET *(*intersecao) (SET *, SET *);
     void *implementacao; 
+    int tipo;
 }; 
 
 // Funções para o TAD SET
@@ -32,15 +33,17 @@ SET *set_criar(unsigned char escolha) {
         set->uniao = (SET *(*)(SET *, SET *))AVL_uniao;
         set->intersecao = (SET *(*)(SET *, SET *))AVL_intersecao;
         set->implementacao = AVL_criar();
+        set->tipo = 0;
     } else if (escolha == 1) { // Implementação com Red-Black Tree
-        //set->inserir = (bool (*)(SET *, int))RBT_inserir;
-        //set->remover = (bool (*)(SET *, int))RBT_remover;
-        //set->pertence = (bool (*)(SET *, int))RBT_busca;
-        // set->imprimir = (void (*)(SET *))RBT_imprimir;
-        //set->apagar = (void (*)(SET **))RBT_apagar;
-        //set->uniao = (SET *(*)(SET *, SET *))RBT_uniao;
-        // set->intersecao = (SET *(*)(SET *, SET *))RBT_intersecao;
-        //set->implementacao = RBT_criar();
+        set->inserir = (bool (*)(SET *, int))RBT_inserir;
+        set->remover = (bool (*)(SET *, int))RBT_remover;
+        set->pertence = (bool (*)(SET *, int))RBT_busca;
+        set->imprimir = (void (*)(SET *))RBT_imprimir;
+        set->apagar = (void (*)(SET **))RBT_apagar;
+        set->uniao = (SET *(*)(SET *, SET *))RBT_uniao;
+        set->intersecao = (SET *(*)(SET *, SET *))RBT_intersecao;
+        set->implementacao = RBT_criar();
+        set->tipo = 1;
     } else {
         printf("A escolha deve ser 0 ou 1, essa escolha é inválida\n");
     }
@@ -68,14 +71,22 @@ bool set_pertence(SET *set, int elemento) {
     return set->pertence(set->implementacao, elemento);
 }
 
+
 SET *set_uniao(SET *A, SET *B) {
-    SET  *C = C->implementacao;
-    return C->uniao(A->implementacao, B->implementacao);
+    SET *newset;
+    newset = set_criar(A->tipo);
+    free(newset->implementacao);
+    newset->implementacao = newset->uniao(A->implementacao, B->implementacao);
+    return newset;
 }
 
+
 SET *set_intersecao(SET *A, SET *B) {
-    SET  *C = C->implementacao;
-    return C->intersecao(A->implementacao, B->implementacao);
+    SET *newset;
+    newset = set_criar(A->tipo);
+    free(newset->implementacao);
+    newset->implementacao = newset->intersecao(A->implementacao, B->implementacao);
+    return newset;
 }
 
 void set_imprimir(SET *set) {
