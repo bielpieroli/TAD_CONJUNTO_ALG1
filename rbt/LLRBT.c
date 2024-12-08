@@ -24,6 +24,26 @@ RBT *RBT_criar(){
     return rbt;
 }
 
+void apagar_recursivo(NODE *no){
+    //liberação de memória em um percurso pós-ordem
+    if(no== NULL) return;
+
+    apagar_recursivo(no->esq);
+    apagar_recursivo(no->dir);
+
+    free(no);
+}
+
+//libera toda a memoria da estrutura, retorna true se conseguir
+bool RBT_apagar(RBT **tree){
+    if(!tree || !(*tree)) return false;
+    apagar_recursivo((*tree)->raiz);
+    free(*tree);
+    *tree = NULL;
+
+    return true;
+}
+
 NODE *criar_node(int valor){
     NODE *novo_node= (NODE*)malloc(sizeof(NODE));
     if(!novo_node) return NULL;
@@ -147,26 +167,84 @@ NODE *move_red_right(NODE *no) {
     return no;
 }
 
-NODE *RBT_remover_aux(NODE *no, int chave){
+NODE *balancear(NODE *no) {
+    if (vermelho(no->dir)) no = rotacao_esquerda(no);
+    if (vermelho(no->esq) && vermelho(no->esq->esq)) no = rotacao_direita(no);
+    if (vermelho(no->esq) && vermelho(no->dir)) inverte(no);
+    return no;
+}
+
+NODE *encontrar_min(NODE *no) {
+    while (no->esq) no = no->esq;
+    return no;
+}
+
+NODE *remover_min(NODE *no) {
+    if (!no->esq) {
+        free(no);
+        return NULL;
+    }
+    if (!vermelho(no->esq) && !vermelho(no->esq->esq)) {
+        no = move_red_left(no);
+    }
+    no->esq = remover_min(no->esq);
+    return balancear(no);
+}
+
+NODE *RBT_remover_aux(NODE *no, int chave, bool *removido){
     if(!no) return NULL;
 
     //busca da subarvore correta
     if(chave < no->valor){
-        if(no->esq && vermelho(no->esq) && !vermelho(no->esq->esq)) {
-            //mover vvermelho a direita
+        if(no->esq && !vermelho(no->esq) && !vermelho(no->esq->esq)) {
+            //para garantir a propriedade das cores
+            no = move_red_left(no);
+        }
+        no->esq = RBT_remover_aux(no->esq, chave, removido);
+    }
+    else {
+        if (vermelho(no->esq)) {
+            no = rotacao_direita(no);
+        }
+        //encontrou o item
+        if (chave == no->valor) {
+            *removido = true; 
+            //caso em que é folha
+            if (!no->dir) { 
+                free(no);
+                return NULL;
+            }
+            // caso contrário, substituir pelo menor da direita
+            NODE *min = encontrar_min(no->dir);
+            no->valor = min->valor;
+            no->dir = remover_min(no->dir);
+        } else {
+            if (no->dir && !vermelho(no->dir) && !vermelho(no->dir->esq)) {
+                no = move_red_right(no); //garantindo a propriedade rubro-negra
+            }
+            no->dir = RBT_remover_aux(no->dir, chave, removido);
         }
     }
+
+    //a volta da recursão vai balanceando a árvore
+    return balancear(no);
 }
 
 bool RBT_remover(RBT *tree, int chave) {
     if (!tree || !tree->raiz) return false;
 
+    bool removido = false;
+
     //chamada da recursao
-    tree->raiz = RBT_remover_aux(tree->raiz, chave);
+    tree->raiz = RBT_remover_aux(tree->raiz, chave, &removido);
 
     if (tree->raiz) {
         tree->raiz->cor = 0; // a raiz sempre eh da cor preta
     }
 
-    return true;
+    return removido;
+}
+
+RBT *RBT_uniao(RBT *A, RBT *B){
+    
 }

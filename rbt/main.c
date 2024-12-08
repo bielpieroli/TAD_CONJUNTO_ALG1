@@ -15,10 +15,21 @@ int main() {
 
     percurso_em_ordem(tree);
 
-    printf("%d ",RBT_busca(tree, 1));
-    printf("%d ",RBT_busca(tree, 0));
-    printf("%d ",RBT_busca(tree, 4));
-    printf("%d ",RBT_busca(tree, -8));
+    printf("%d ", RBT_remover(tree, 1));
+    printf("%d ", RBT_remover(tree, 0));
+    printf("%d ", RBT_remover(tree, 4));
+    printf("%d ", RBT_remover(tree, 8));
+
+
+
+    RBT_inserir(tree, 30);
+    RBT_remover(tree, 1);
+    RBT_inserir(tree, -11);
+    RBT_remover(tree, 4);
+    RBT_inserir(tree, 20);
+    RBT_remover(tree, 6);
+
+    percurso_em_ordem(tree);
 
     return 0;
 
