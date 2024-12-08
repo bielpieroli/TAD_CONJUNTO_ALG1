@@ -22,4 +22,5 @@
     bool RBT_remover(RBT *tree, int chave);
 
     RBT *RBT_uniao(RBT *A, RBT *B);
+    RBT *RBT_intersec(RBT *A, RBT *B);
 #endif

@@ -245,6 +245,60 @@ bool RBT_remover(RBT *tree, int chave) {
     return removido;
 }
 
-RBT *RBT_uniao(RBT *A, RBT *B){
-    
+//percorre recursivamente a árvore para adicionar todos os nós na nova árvore
+void RBT_uniao_aux(NODE *no, RBT *nova_arvore) {
+    if (!no) return;
+
+    //inserindo o nó atual na nova árvore
+    RBT_inserir(nova_arvore, no->valor);
+
+    RBT_uniao_aux(no->esq, nova_arvore);
+    RBT_uniao_aux(no->dir, nova_arvore);
+}
+
+RBT *RBT_uniao(RBT *A, RBT *B) {
+    if (!A || !B) return NULL; // Árvores nulas
+
+    //criamos uma nova RBT para armazenar a união
+    RBT *nova_arvore = RBT_criar();
+    if(!nova_arvore) return NULL;
+
+    //percorremos as duas árvores e inserimos os elementos
+    if (A && A->raiz) {
+        RBT_uniao_aux(A->raiz, nova_arvore);
+    }
+    if (B && B->raiz) {
+        RBT_uniao_aux(B->raiz, nova_arvore);
+    }
+
+    return nova_arvore;
+}
+
+void RBT_intersec_aux(NODE *no, RBT *B, RBT *nova_arvore) {
+    if (!no) return;
+
+    //Percurso em ordem pela arvore
+
+    RBT_intersec_aux(no->esq, B, nova_arvore);
+
+    //verificamos se o elemento está presente na árvore B para inserir na nova arvore
+    if (RBT_busca(B, no->valor)) {
+        RBT_inserir(nova_arvore, no->valor); 
+    }
+
+    RBT_intersec_aux(no->dir, B, nova_arvore);
+}
+
+//Retorna a intersecção entre os elementos de 2 árvores
+RBT *RBT_intersec(RBT *A, RBT *B) {
+    if (!A || !B) return NULL; // Se uma das árvores é nula, a interseção é nula
+
+    //criamos uma nova RBT para armazenar a intersecção
+    RBT *nova_arvore = RBT_criar();
+    if(!nova_arvore) return NULL;
+
+    //percorremos a árvore A e verificamos se os elementos estão em B
+    RBT_intersec_aux(A->raiz, B, nova_arvore);
+
+    return nova_arvore;
 }
