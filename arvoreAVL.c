@@ -156,15 +156,18 @@ void no_em_ordem(NO* no) {
     if (no == NULL)
         return;
     no_em_ordem(no->esq);
-    printf("Nó %d: Altura(%d), Fator de Balanceamento(%d)\n", no->chave, no->alt, fator_de_balanceamento(no));
+    //printf("Nó %d: Altura(%d), Fator de Balanceamento(%d)\n", no->chave, no->alt, fator_de_balanceamento(no));
+    printf("%d ", no->chave);
     no_em_ordem(no->dir);
 }
 
 /// @brief A árvore AVL será percorrida em ordem
 /// @param avl 
 void AVL_em_ordem(AVL* avl) {
-    if (avl != NULL)
+    if (avl != NULL) {
         no_em_ordem(avl->raiz);
+        printf("\n");
+    }
 }
 
 /// @brief Percurso dos nós da árvore em pós-ordem: 1) Pecorre recursivamente à esquerda 2) Percorre recursivamente à direita 3) Visita

@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     {
         scanf("%d", &x);
         set_inserir(A, x);
+        set_imprimir(A);
     }
 
     for (int i = 0; i < n_b; i++)

@@ -12,13 +12,14 @@ typedef struct node_{
 struct red_black_tree{
     NODE *raiz;
     int tam;
-
 };
 
+//aloca e retorna um ponteiro para RBT caso haja memória, caso contrário retona NULL 
 RBT *RBT_criar(){
     RBT *rbt = (RBT*)malloc(sizeof(RBT));
     if(!rbt) return NULL;
 
+    //inicialização dos valores
     rbt->raiz = NULL;
     rbt->tam = 0;
     return rbt;
@@ -44,9 +45,12 @@ bool RBT_apagar(RBT **tree){
     return true;
 }
 
+//aloca e retorna um ponteiro para NODE caso haja memória, caso contrário retona NULL 
 NODE *criar_node(int valor){
     NODE *novo_node= (NODE*)malloc(sizeof(NODE));
     if(!novo_node) return NULL;
+
+    //inicialização dos valores
     novo_node->valor = valor;
     novo_node->dir = NULL;
     novo_node->esq = NULL;
@@ -54,13 +58,18 @@ NODE *criar_node(int valor){
     return novo_node;
 }
 
+//ABAIXO ESTÃO FUNÇÕES AUXILIARES PARA BALANCEAR A ÁRVORE
+
+//retorna 1 se vermelho e 0 se preto
 int vermelho(NODE *h){
-    if(h==NULL){
+    if(h==NULL){   //nós nulos são pretos
         return 0;
     }
     return (h->cor == 1);
 }
 
+
+//inverte as cores do nó atual, e dos dois filhos
 void inverte(NODE *no){
     if(!no) return;
     no->cor = !no->cor;
@@ -73,9 +82,12 @@ void inverte(NODE *no){
 NODE *rotacao_direita(NODE *c){
     if(!c) return NULL;
 
+    //balanceamento
     NODE *b = c->esq;
     c->esq = b->dir;
     b->dir = c;
+
+    //propagação das cores
     b->cor = c->cor;
     c->cor = 1;
     return b;
@@ -84,45 +96,65 @@ NODE *rotacao_direita(NODE *c){
 NODE *rotacao_esquerda(NODE *a){
     if(!a) return NULL;
 
+    //balanceamento
     NODE *b = a->dir;
     b->cor = a->cor;
     a->cor = 1;
+
+    //propagação das cores
     a->dir = b->esq;
     b->esq = a;
     return b;
 }
 
-NODE *inserir_node(NODE *h, int valor){
+//recursão auxiliar para inserir nó na árvore
+NODE *inserir_node(NODE *h, int valor, bool *inserido) {
     //busca do local a ser inserido
-    if(!h) return criar_node(valor);
-    if(valor < h->valor) 
-        h->esq = inserir_node(h->esq, valor);
-    else if(valor > h->valor) 
-        h->dir = inserir_node(h->dir, valor);
+    if (!h) {
+        *inserido = true; // nó foi realmente inserido
+        return criar_node(valor);
+    }
 
-    //correção das regras quebradas
-    if(!vermelho(h->esq) && vermelho (h->dir)){
+    if (valor < h->valor) {
+        h->esq = inserir_node(h->esq, valor, inserido);
+    } else if (valor > h->valor) {
+        h->dir = inserir_node(h->dir, valor, inserido);
+    } else {
+        // Valor já existe, não fazemos nada
+        *inserido = false;
+        return h;
+    }
+
+    // Correção das regras quebradas da LLRBT
+    if (!vermelho(h->esq) && vermelho(h->dir)) {
         h = rotacao_esquerda(h);
     }
-    if(vermelho(h->esq) && vermelho (h->esq->esq)){
+    if (vermelho(h->esq) && vermelho(h->esq->esq)) {
         h = rotacao_direita(h);
     }
-    if(vermelho(h->esq) && vermelho (h->dir)){
+    if (vermelho(h->esq) && vermelho(h->dir)) {
         inverte(h);
     }
 
     return h;
 }
 
-bool RBT_inserir(RBT *tree, int dado){
-    if(!tree) return false;
-    NODE* no = inserir_node(tree->raiz, dado);
-    tree->tam++;
-    tree->raiz = no;
-    tree->raiz->cor = 0; //a raiz da arvore sempre é preta
-    return true;
+// Retorna true caso consiga inserir um elemento na RBT, false caso contrário
+bool RBT_inserir(RBT *tree, int dado) {
+    if (!tree) return false;
+
+    bool inserido = false;
+    tree->raiz = inserir_node(tree->raiz, dado, &inserido);
+
+    if (inserido) {
+        tree->tam++;          //incrementa o tamanho apenas se algo foi inserido
+        tree->raiz->cor = 0;  //a raiz da árvore sempre é preta
+    }
+
+    return inserido;
 }
 
+//recursão auxiliar para o percurso
 void percurso_em_ordem_aux(NODE *no){
     if(!no) return;
     percurso_em_ordem_aux(no->esq);
@@ -130,6 +162,7 @@ void percurso_em_ordem_aux(NODE *no){
     percurso_em_ordem_aux(no->dir);
 }
 
+//faz um percurso em ordem e printa seus elementos
 void percurso_em_ordem(RBT *tree){
     if(!tree) return;
     printf("Percurso: ");
@@ -137,17 +170,20 @@ void percurso_em_ordem(RBT *tree){
     printf("\n");
 }
 
+//recursão auxiliar para busca
 bool RBT_busca_aux(NODE *no, int dado){
     if(!no) return false;
     if(no->valor == dado) return true;
     return (RBT_busca_aux(no->esq, dado) || RBT_busca_aux(no->dir, dado));
 }
 
+//busca um elemento na RBT e retorna true caso tenha achado
 bool RBT_busca(RBT *tree, int dado){
     if(!tree) return false;
     return RBT_busca_aux(tree->raiz, dado);
 }
 
+//propagação da aresta vermelha quando se está atravessando a árvore pela esquerda
 NODE *move_red_left(NODE *no) {
     inverte(no);
     if (vermelho(no->dir->esq)) {
@@ -158,6 +194,7 @@ NODE *move_red_left(NODE *no) {
     return no;
 }
 
+//propagação da aresta vermelha quando se está atravessando a árvore pela direita
 NODE *move_red_right(NODE *no) {
     inverte(no);
     if (vermelho(no->esq->esq)) {
@@ -167,6 +204,7 @@ NODE *move_red_right(NODE *no) {
     return no;
 }
 
+//Essa função adequa a árvore às regras da RBT no após uma remoção
 NODE *balancear(NODE *no) {
     if (vermelho(no->dir)) no = rotacao_esquerda(no);
     if (vermelho(no->esq) && vermelho(no->esq->esq)) no = rotacao_direita(no);
@@ -174,11 +212,13 @@ NODE *balancear(NODE *no) {
     return no;
 }
 
+//retorna o menor elemento de uma subárvore
 NODE *encontrar_min(NODE *no) {
     while (no->esq) no = no->esq;
     return no;
 }
 
+//remove o menor elemento da subárvore, para auxiliar na remoção em RBT
 NODE *remover_min(NODE *no) {
     if (!no->esq) {
         free(no);
@@ -230,6 +270,7 @@ NODE *RBT_remover_aux(NODE *no, int chave, bool *removido){
     return balancear(no);
 }
 
+//retorna true caso consiga remover o elemento da árvore
 bool RBT_remover(RBT *tree, int chave) {
     if (!tree || !tree->raiz) return false;
 
@@ -239,7 +280,7 @@ bool RBT_remover(RBT *tree, int chave) {
     tree->raiz = RBT_remover_aux(tree->raiz, chave, &removido);
 
     if (tree->raiz) {
-        tree->raiz->cor = 0; // a raiz sempre eh da cor preta
+        tree->raiz->cor = 0; // a raiz sempre é da cor preta
     }
 
     return removido;
