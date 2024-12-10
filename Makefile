@@ -13,5 +13,6 @@ arvoreAVL.o:
 clean:
 	rm -f *.o main conjunto.zip
 	rm -f Testes/*.gerado
+	rm -f Testes/*.valgrind
 zip:
 	zip -r conjunto.zip *
