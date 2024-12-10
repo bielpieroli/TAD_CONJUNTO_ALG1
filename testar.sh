@@ -14,40 +14,49 @@ MEMORY_LEAKS=0
 
 # Loop por todos os arquivos de entrada
 for ENTRADA in "$DIRETORIO_TESTES"/*.in; do
-    # Nome base do arquivo (ex: 0.in -> 0)
-    BASE=$(basename "$ENTRADA" .in)
-    SAIDA_ESPERADA="$DIRETORIO_TESTES/$BASE.out"
-    SAIDA_GERADA="$DIRETORIO_TESTES/$BASE.gerado"
-    LOG_VALGRIND="$DIRETORIO_TESTES/$BASE.valgrind"
-
-    # Executa o programa com o Valgrind
-    valgrind --leak-check=full --error-exitcode=1 "$EXECUTAVEL" < "$ENTRADA" > "$SAIDA_GERADA" 2> "$LOG_VALGRIND"
-
-    # Verifica se Valgrind encontrou vazamentos
+    echo "============================================="
+    echo "Iniciando teste com entrada: $ENTRADA"
+    echo "============================================="
+    
+    # Obter o nome do arquivo de saída correspondente
+    SAIDA="${ENTRADA%.in}.out"
+    
+    # Executar o programa com Valgrind para verificar memory leaks
+    valgrind_output=$(valgrind --leak-check=full --error-exitcode=1 "$EXECUTAVEL" < "$ENTRADA" 2>&1)
+    
     if [ $? -ne 0 ]; then
-        echo "Teste $BASE: FAILED (Memory Leak)"
-        echo "Relatório do Valgrind:"
-        cat "$LOG_VALGRIND"
-        ((MEMORY_LEAKS++))
-        ((FALHARAM++))
-        continue
-    fi
-
-    # Compara a saída gerada com a esperada
-    if diff -q "$SAIDA_GERADA" "$SAIDA_ESPERADA" > /dev/null; then
-        echo "Teste $BASE: PASSED"
-        ((PASSARAM++))
+        # Memory leak detectado
+        MEMORY_LEAKS=$((MEMORY_LEAKS + 1))
+        echo "🔴 Memory Leak detectado no caso: $ENTRADA"
+        echo "$valgrind_output"
+        FALHARAM=$((FALHARAM + 1))
     else
-        echo "Teste $BASE: FAILED (Output Mismatch)"
-        echo "Diferenças:"
-        diff "$SAIDA_GERADA" "$SAIDA_ESPERADA"
-        ((FALHARAM++))
+        # Caso sem memory leaks, comparar saída esperada e obtida
+        actual_output=$("$EXECUTAVEL" < "$ENTRADA")
+        expected_output=$(cat "$SAIDA")
+        
+        if [ "$actual_output" == "$expected_output" ]; then
+            # Caso passou
+            echo "✅ Caso passou com sucesso!"
+            PASSARAM=$((PASSARAM + 1))
+        else
+            # Caso falhou, exibir diferença entre esperado e gerado
+            echo "❌ Caso falhou!"
+            echo -e "\nSaída esperada:"
+            echo "$expected_output"
+            echo -e "\nSaída obtida:"
+            echo "$actual_output"
+            FALHARAM=$((FALHARAM + 1))
+        fi
     fi
+    echo -e "\n"
 done
 
-# Resumo dos resultados
-echo "--------------------------------------"
-echo "Total de testes: $((PASSARAM + FALHARAM))"
-echo "Passaram: $PASSARAM"
-echo "Falharam: $FALHARAM"
-echo "Memory Leaks detectados: $MEMORY_LEAKS"
+# Exibir resumo dos resultados
+echo "============================================="
+echo "Resumo dos Resultados:"
+echo "============================================="
+echo "✅ Passaram: $PASSARAM"
+echo "❌ Falharam: $FALHARAM"
+echo "🔴 Memory leaks detectados: $MEMORY_LEAKS"
+echo "============================================="

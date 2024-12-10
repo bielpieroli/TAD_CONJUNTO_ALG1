@@ -3,7 +3,7 @@ all: set.o LLRBT.o arvoreAVL.o
 run: clean all
 	valgrind ./main.exe
 teste: clean all
-	valgrind ./testar.sh main.exe
+	./testar.sh main.exe
 set.o:
 	gcc -c set.c -o set.o
 LLRBT.o:
