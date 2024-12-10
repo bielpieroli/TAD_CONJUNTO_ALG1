@@ -469,11 +469,9 @@ bool AVL_consulta(AVL* avl, int chave) {
 
 NO* no_inserir_uniao(AVL *C, NO *elemento) {
     if(elemento != NULL) {
-        if(!AVL_consulta(C, elemento->chave)) {
             if(!AVL_inserir(C, elemento->chave)) {
                 printf("Erro na inserção do elemento %d", elemento->chave);
             }
-        }
         C->raiz = no_inserir_uniao(C, elemento->esq);
         C->raiz = no_inserir_uniao(C, elemento->dir);
     }

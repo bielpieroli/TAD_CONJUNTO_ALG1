@@ -14,7 +14,7 @@ struct red_black_tree{
     int tam;
 };
 
-//aloca e retorna um ponteiro para RBT caso haja memória, caso contrário retona NULL 
+// Aloca e retorna um ponteiro para RBT caso haja memória, caso contrário retona NULL 
 RBT *RBT_criar(){
     RBT *rbt = (RBT*)malloc(sizeof(RBT));
     if(!rbt) return NULL;
@@ -25,17 +25,17 @@ RBT *RBT_criar(){
     return rbt;
 }
 
+// Liberação de memória em um percurso pós-ordem
 void apagar_recursivo(NODE *no){
-    //liberação de memória em um percurso pós-ordem
+    
     if(no== NULL) return;
-
     apagar_recursivo(no->esq);
     apagar_recursivo(no->dir);
 
     free(no);
 }
 
-//libera toda a memoria da estrutura, retorna true se conseguir
+// Libera toda a memoria da estrutura, retorna true se conseguir
 bool RBT_apagar(RBT **tree){
     if(!tree || !(*tree)) return false;
     apagar_recursivo((*tree)->raiz);
@@ -45,7 +45,7 @@ bool RBT_apagar(RBT **tree){
     return true;
 }
 
-//aloca e retorna um ponteiro para NODE caso haja memória, caso contrário retona NULL 
+// Aloca e retorna um ponteiro para o NODE criado, caso haja memória, caso contrário retona NULL 
 NODE *criar_node(int valor){
     NODE *novo_node= (NODE*)malloc(sizeof(NODE));
     if(!novo_node) return NULL;
@@ -58,18 +58,19 @@ NODE *criar_node(int valor){
     return novo_node;
 }
 
-//ABAIXO ESTÃO FUNÇÕES AUXILIARES PARA BALANCEAR A ÁRVORE
+// ABAIXO ESTÃO FUNÇÕES AUXILIARES PARA BALANCEAR A ÁRVORE:
 
-//retorna 1 se vermelho e 0 se preto
+// Retorna 1 se vermelho e 0 se preto
 int vermelho(NODE *h){
-    if(h==NULL){   //nós nulos são pretos
+    // Nós nulos são pretos
+    if(h==NULL){   
         return 0;
     }
     return (h->cor == 1);
 }
 
 
-//inverte as cores do nó atual, e dos dois filhos
+// Inverte as cores do nó atual, e dos dois filhos
 void inverte(NODE *no){
     if(!no) return;
     no->cor = !no->cor;
@@ -79,42 +80,46 @@ void inverte(NODE *no){
         no->esq->cor = !no->esq->cor;
 }
 
+// Função que realiza a rotação direita
 NODE *rotacao_direita(NODE *c){
     if(!c) return NULL;
 
-    //balanceamento
+    // Balanceamento na posição dos nós
     NODE *b = c->esq;
     c->esq = b->dir;
     b->dir = c;
 
-    //propagação das cores
+    // Propagação das cores
     b->cor = c->cor;
     c->cor = 1;
     return b;
 }
 
+// Função que realiza a rotação esquerda
 NODE *rotacao_esquerda(NODE *a){
     if(!a) return NULL;
 
-    //balanceamento
+    // Balanceamento
     NODE *b = a->dir;
     b->cor = a->cor;
     a->cor = 1;
 
-    //propagação das cores
+    // Propagação das cores
     a->dir = b->esq;
     b->esq = a;
     return b;
 }
 
-//recursão auxiliar para inserir nó na árvore
+// Recursão auxiliar para inserir nó na árvore
 NODE *inserir_node(NODE *h, int valor, bool *inserido) {
-    //busca do local a ser inserido
+    // Busca do local a ser inserido
     if (!h) {
-        *inserido = true; // nó foi realmente inserido
+        // Nó foi realmente inserido
+        *inserido = true; 
         return criar_node(valor);
     }
 
+    // Percorre buscando a posição de inserção recursivamente
     if (valor < h->valor) {
         h->esq = inserir_node(h->esq, valor, inserido);
     } else if (valor > h->valor) {
@@ -147,14 +152,16 @@ bool RBT_inserir(RBT *tree, int dado) {
     tree->raiz = inserir_node(tree->raiz, dado, &inserido);
 
     if (inserido) {
-        tree->tam++;          //incrementa o tamanho apenas se algo foi inserido
-        tree->raiz->cor = 0;  //a raiz da árvore sempre é preta
+        // Incrementa o tamanho apenas se algo foi inserido
+        tree->tam++;          
+        // A raiz da árvore sempre é preta
+        tree->raiz->cor = 0;  
     }
 
     return inserido;
 }
 
-//recursão auxiliar para o percurso
+// Recursão auxiliar para o percurso
 void percurso_em_ordem_aux(NODE *no){
     if(!no) return;
     percurso_em_ordem_aux(no->esq);
@@ -162,28 +169,29 @@ void percurso_em_ordem_aux(NODE *no){
     percurso_em_ordem_aux(no->dir);
 }
 
-//faz um percurso em ordem e printa seus elementos
+// Faz um percurso em ordem e printa seus elementos
 void RBT_imprimir(RBT *tree){
     if(!tree) return;
-    printf("Percurso: ");
     percurso_em_ordem_aux(tree->raiz);
     printf("\n");
 }
 
-//recursão auxiliar para busca
+// Recursão auxiliar para busca binária na árvore Rubro-Negra
 bool RBT_busca_aux(NODE *no, int dado){
     if(!no) return false;
-    if(no->valor == dado) return true;
-    return (RBT_busca_aux(no->esq, dado) || RBT_busca_aux(no->dir, dado));
+    // Busca binária recursiva
+    if(no->valor > dado) return RBT_busca_aux(no->esq, dado);
+    else if(no->valor < dado) return RBT_busca_aux(no->dir, dado);
+    else return true;
 }
 
-//busca um elemento na RBT e retorna true caso tenha achado
+// Busca um elemento na RBT e retorna true caso tenha achado
 bool RBT_busca(RBT *tree, int dado){
-    if(!tree) return false;
+    if(!tree) return false; 
     return RBT_busca_aux(tree->raiz, dado);
 }
 
-//propagação da aresta vermelha quando se está atravessando a árvore pela esquerda
+// Propagação da aresta vermelha quando se está atravessando a árvore pela esquerda
 NODE *move_red_left(NODE *no) {
     inverte(no);
     if (vermelho(no->dir->esq)) {
@@ -194,7 +202,7 @@ NODE *move_red_left(NODE *no) {
     return no;
 }
 
-//propagação da aresta vermelha quando se está atravessando a árvore pela direita
+// Propagação da aresta vermelha quando se está atravessando a árvore pela direita
 NODE *move_red_right(NODE *no) {
     inverte(no);
     if (vermelho(no->esq->esq)) {
@@ -204,7 +212,7 @@ NODE *move_red_right(NODE *no) {
     return no;
 }
 
-//Essa função adequa a árvore às regras da RBT no após uma remoção
+// Essa função adequa a árvore às regras da RBT no após uma remoção
 NODE *balancear(NODE *no) {
     if (vermelho(no->dir)) no = rotacao_esquerda(no);
     if (vermelho(no->esq) && vermelho(no->esq->esq)) no = rotacao_direita(no);
@@ -212,13 +220,13 @@ NODE *balancear(NODE *no) {
     return no;
 }
 
-//retorna o menor elemento de uma subárvore
+// Retorna o menor elemento de uma subárvore
 NODE *encontrar_min(NODE *no) {
     while (no->esq) no = no->esq;
     return no;
 }
 
-//remove o menor elemento da subárvore, para auxiliar na remoção em RBT
+// Remove o menor elemento da subárvore, para auxiliar na remoção em RBT
 NODE *remover_min(NODE *no) {
     if (!no->esq) {
         free(no);
@@ -231,13 +239,14 @@ NODE *remover_min(NODE *no) {
     return balancear(no);
 }
 
+// Função de remoção recursiva via nós
 NODE *RBT_remover_aux(NODE *no, int chave, bool *removido){
     if(!no) return NULL;
 
-    //busca da subarvore correta
+    // Busca da subarvore correta
     if(chave < no->valor){
         if(no->esq && !vermelho(no->esq) && !vermelho(no->esq->esq)) {
-            //para garantir a propriedade das cores
+            // Para garantir a propriedade das cores
             no = move_red_left(no);
         }
         no->esq = RBT_remover_aux(no->esq, chave, removido);
@@ -246,65 +255,69 @@ NODE *RBT_remover_aux(NODE *no, int chave, bool *removido){
         if (vermelho(no->esq)) {
             no = rotacao_direita(no);
         }
-        //encontrou o item
+        // Encontrou o item
         if (chave == no->valor) {
             *removido = true; 
-            //caso em que é folha
+            // Caso em que é folha
             if (!no->dir) { 
                 free(no);
                 return NULL;
             }
-            // caso contrário, substituir pelo menor da direita
+            // Caso contrário, substituir pelo menor da direita
             NODE *min = encontrar_min(no->dir);
             no->valor = min->valor;
             no->dir = remover_min(no->dir);
         } else {
+            // Garantindo a propriedade rubro-negra
             if (no->dir && !vermelho(no->dir) && !vermelho(no->dir->esq)) {
-                no = move_red_right(no); //garantindo a propriedade rubro-negra
+                no = move_red_right(no); 
             }
             no->dir = RBT_remover_aux(no->dir, chave, removido);
         }
     }
 
-    //a volta da recursão vai balanceando a árvore
+    // A volta da recursão vai balanceando a árvore
     return balancear(no);
 }
 
-//retorna true caso consiga remover o elemento da árvore
+// Retorna true caso consiga remover o elemento da árvore
 bool RBT_remover(RBT *tree, int chave) {
     if (!tree || !tree->raiz) return false;
 
     bool removido = false;
 
-    //chamada da recursao
+    // Chamada da recursao
     tree->raiz = RBT_remover_aux(tree->raiz, chave, &removido);
 
     if (tree->raiz) {
-        tree->raiz->cor = 0; // a raiz sempre é da cor preta
+        // A raiz sempre é da cor preta
+        tree->raiz->cor = 0; 
     }
 
     return removido;
 }
 
-//percorre recursivamente a árvore para adicionar todos os nós na nova árvore
+// Percorre recursivamente a árvore para adicionar todos os nós na nova árvore
 void RBT_uniao_aux(NODE *no, RBT *nova_arvore) {
     if (!no) return;
 
-    //inserindo o nó atual na nova árvore
+    // Inserindo o nó atual na nova árvore
     RBT_inserir(nova_arvore, no->valor);
 
     RBT_uniao_aux(no->esq, nova_arvore);
     RBT_uniao_aux(no->dir, nova_arvore);
 }
 
+// Função que efetua a união entre os conteúdos de duas dadas RBT
 RBT *RBT_uniao(RBT *A, RBT *B) {
-    if (!A || !B) return NULL; // Árvores nulas
+    // Árvores nulas
+    if (!A && !B) return NULL; 
 
-    //criamos uma nova RBT para armazenar a união
+    //  Criamos uma nova RBT para armazenar a união
     RBT *nova_arvore = RBT_criar();
     if(!nova_arvore) return NULL;
 
-    //percorremos as duas árvores e inserimos os elementos
+    //  Percorremos as duas árvores e inserimos os elementos
     if (A && A->raiz) {
         RBT_uniao_aux(A->raiz, nova_arvore);
     }
@@ -315,14 +328,14 @@ RBT *RBT_uniao(RBT *A, RBT *B) {
     return nova_arvore;
 }
 
+// Função auxiliar que percorre a árvore em ordem adicionando à nova árvore
 void RBT_intersec_aux(NODE *no, RBT *B, RBT *nova_arvore) {
     if (!no) return;
 
     //Percurso em ordem pela arvore
-
     RBT_intersec_aux(no->esq, B, nova_arvore);
 
-    //verificamos se o elemento está presente na árvore B para inserir na nova arvore
+    // Verificamos se o elemento está presente na árvore B para inserir na nova arvore
     if (RBT_busca(B, no->valor)) {
         RBT_inserir(nova_arvore, no->valor); 
     }
@@ -330,15 +343,16 @@ void RBT_intersec_aux(NODE *no, RBT *B, RBT *nova_arvore) {
     RBT_intersec_aux(no->dir, B, nova_arvore);
 }
 
-//Retorna a intersecção entre os elementos de 2 árvores
+// Retorna a intersecção entre os elementos de 2 árvores
 RBT *RBT_intersecao(RBT *A, RBT *B) {
-    if (!A || !B) return NULL; // Se uma das árvores é nula, a interseção é nula
+    // Se uma das árvores é nula, a interseção é nula
+    if (!A || !B) return NULL; 
 
-    //criamos uma nova RBT para armazenar a intersecção
+    // Criamos uma nova RBT para armazenar a intersecção
     RBT *nova_arvore = RBT_criar();
     if(!nova_arvore) return NULL;
 
-    //percorremos a árvore A e verificamos se os elementos estão em B
+    // Percorremos a árvore A e verificamos se os elementos estão em B
     RBT_intersec_aux(A->raiz, B, nova_arvore);
 
     return nova_arvore;
