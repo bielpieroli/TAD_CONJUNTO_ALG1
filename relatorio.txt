@@ -1,56 +1,100 @@
 Relatório - Trabalho 2 - Algoritmos e Estuturas de dados
 Dante Brito Lourenço - 15447326 e João Gabriel Pieroli da Silva - 15678578
 
-Para a implementação do TAD Conjunto, escolhemos duas estruturas de dados: 
-LLRBT (Left-Leaning Red-Black Tree) e AVL Tree. Ambas são árvores de busca binária 
-autobalanceadas que oferecem excelente desempenho para as operações necessárias, garantindo 
-eficiência superior, em comparação com estruturas como listas encadeadas.
+ * IMPLEMENTAÇÃO: 
 
-Justificativa para a escolha das estruturas de dados:
+Para a implementação do presente projeto, escolhemos duas estruturas de dados: LLRBT (Left-Leaning Red-Black 
+Tree) e AVL Tree. Ambas são árvores de busca binária autobalanceadas que oferecem excelente desempenho para as 
+operações necessárias, garantindo eficiência superior, em comparação com estruturas como listas encadeadas.
 
-Red-Black Tree
-A Red-Black Tree é uma estrutura de dado que mantém um balanceamento próximo ao ideal, 
-garantindo que a profundidade da árvore seja no máximo 2*log(n). 
-É possível argumentar que as operações de inserção e remoção têm desempenho eficiente devido 
-à sua estratégia de balanceamento menos rigorosa, o que pode resultar em menos rotações comparado à AVL.
-Apesar de tudo, a rotação e inserção na AVL são muito semelhantes em eficiência na prática.
+O TAD Conjunto é cliente dos TAD's das duas estruturas citadas e utiliza, por meio de ponteiros para funções,
+as funções implementadas de cada uma delas, conforme a escolha do usuário.
 
-Árvore AVL
-A Árvore AVL é uma estrutura de dados que garante um balanceamento estrito, mantendo a diferença
-de altura entre subárvores adjacentes sempre menor ou igual a 1. Devido ao balanceamento mais rigoroso, 
-a AVL Tree tem desempenho levemente melhor em operações de busca, pois a altura é minimizada (1,44log(n)).
-É ideal para situações onde a frequência de consultas (buscas) é maior que a de inserções e remoções.
+ * COMO ESTÁ PAUTADA A LÓGICA DAS ENTRADAS DO CÓDIGO:
+O código recebe, primeiramente, uma  inteira do usuário, escolhendo a implementação desejada: 
+0 -> AVL
+1 -> LLRBT
+Em seguida, recebe dois inteiros, que determinam o tamanho "n" do conjunto A e o tamanho "m" do conjunto B.
+Após isso, lê-se os "n" elementos do conjunto A e os "m" elementos do conjunto B.
+Então, recebe-se do usuário a operação que será realizada:
+1 -> PERTENCE (Recebe-se mais uma entrada, o elemento "x", para verificar se ele pertence ou não ao conjunto)
+2 -> UNIÃO
+3 -> INTERSEÇÃO
+4 -> REMOÇÃO (Recebe-se mais uma entrada, o elemento "x", para remover o elemento do conjunto, caso exista nele)
+OBS.: PERTENCE(1) E REMOÇÃO(4) ESTÃO ACONTECENDO, POR PADRÃO, NO CONJUNTO A.
 
+ * COMO ESTÁ PAUTADA A LÓGICA DAS SAÍDAS DO CÓDIGO:
+1 -> PERTENCE:
+"Pertence." = Caso o elemento fornecido esteja presente no conjunto A
+"Não pertence." = Caso o elemento fornecido não esteja presente no conjunto A
+2 -> UNIÃO:
+Ex.: Suponha A = "1, 2, 3, " e B = "2, 3, 4, 5"
+"1, 2, 3, 4, 5, " = O conjunto resultante da união entre os conjuntos A e B
+3 -> INTERSEÇÃO:
+Ex.: Suponha A = "1, 2, 3, " e B = "2, 3, 4, 5"
+Ex.: "2, 3, " = O conjunto resultante da interseção entre os conjuntos A e B
+4 -> REMOÇÃO:
+Ex.: Suponha A = "1, 2, 3, ".
+x = 1 -> "2, 3, " (1 está no conjunto A e é removido)
+x = 0 -> "1, 2, 3, " (0 não está no conjunto A e não tem como ser removido)
 
-Apesar das diferenças entre si, ambas tem propriedades semelhantes, que permitem que as 
-operações específicas sejam realizadas da maneira mais eficiente possível. Todas as operações principais, 
-sendo busca, inserção e remoção, possuem complexidade O(log(n)), independentemente da ordem de inserção 
-dos elementos.
+ * JUSTIFICATIVA DA UTILIZAÇÃO DESSAS ESTRUTURAS DE DADOS:
 
-PERTENCE:
-Para essa operação estamos fazendo uma busca simples do elemento pela árvore, o que pode ser equivalente
-a percorrer a altura máxima da árvore. Conhecendo as propriedades de suas alturas, na RBT temos uma 
-altura máxima percorrida de 2log(n), e na AVL temos 1,44log(n). Dessa forma, embora tenham complexidades
-assintóticas equivalentes de O(log(n)), a AVL possui um desempenho levemente melhor para essa operação.
+- Left-Leaning Red-Black Tree
+A Red-Black Tree é uma estrutura de dado que mantém um balanceamento próximo ao ideal, garantindo que a profundidade
+da árvore seja, no máximo, 2*log(n). É possível argumentar que as operações de inserção e remoção têm desempenho 
+eficiente, devido à sua estratégia de balanceamento menos rigorosa, o que pode resultar em menos rotações comparado à
+AVL. Apesar de tudo, a rotação e inserção na AVL são muito semelhantes em eficiência na prática. Além disso, em relação
+à AVL, a sua implementação é mais compacta. A
 
-UNIÃO:
-Em ambas as estruturas, foi implementado o método da seguinte maneira: Faça um percurso pela árvore A,
-e adicione estes elementos em C, e repita o mesmo processo para B. Como as estruturas não permitem
-réplicas, isso resulta em uma união. Sabendo que esse processo depende criticamente da inserção na
-estrutura, é complicado avaliar a estrutura mais vantajosa, visto que são similares nesse atributo.
-Sendo n o tamanho de A e m o tamanho de B, temos uma complexidade final de O((m+n)log(n+m)).
-Considerando a altura máxima das duas árvores, e busca/inserção tendo tendo número de comparações
-proporcionais a essa altura, podemos estipular as complexidades:
-AVL: O(1,44(m+n)log(n+m)).
-LLRBT: O(2(m+n)log(n+m)).
+- Árvore AVL
+A Árvore AVL é uma estrutura de dados que garante um balanceamento estrito, mantendo a diferença de altura entre subárvores
+adjacentes sempre menor ou igual a 1. Devido ao balanceamento mais rigoroso, a AVL Tree tem desempenho levemente melhor em
+operações de busca, pois a altura é minimizada (1,44*log(n)). É ideal para situações onde a frequência de consultas (buscas)
+é maior que a de inserções e remoções.
 
-INTERSEÇÃO:
-Em ambas as estruturas, foi implementado o método da seguinte maneira: Faça um percurso pela árvore B,
-e verifique se cada elemento está presente em A, para adicioná-lo em C caso esteja. Desta forma, a busca
-em A é crítica e a inserção é muito importante para a eficiência.
-Novamente, por conta dessas diversas nuances no método desenvolvido, é difícil de avaliar com certeza 
-a estrutura mais vantajosa, visto que são similares nesse atributo e não é possível prever com exatidão
-o número de rotações apenas com base no tamanho da entrada.
+ * COMPLEXIDADE: 
+
+Apesar das diferenças entre si, ambas tem propriedades semelhantes, que permitem que as operações de manipulação de conjuntos
+sejam realizadas da maneira mais eficiente. Todas as operações principais, sejam elas, busca, inserção e remoção, possuem 
+complexidade O(log(n)).
+Essas funções são chamadas recursivamente fazendo um percurso na árvore e, por serem Árvores Binárias de Busca, ao escolher
+um dos dois filhos para continuar o trajeto, reduz-se o espaço de busca. Considerando idealmente o caso de uma Árvore Binária 
+Completa Cheia, têm-se:
+- T(n) = T(n/2) + O(1)
+Sendo assim, pelo Teorema Mestre T(n) = a*log(n/b) + f(n), tome a = 1 e b = 2.
+Logo, verifica-se que se trata do segundo caso do Teorema mestre: 
+- Logaritmo de a na base b = 0
+- n^d = O(1) <=> d = 0
+Portanto, T(n) = O(n^0*log(n)) = O(log(n)).
+Frente aos fatos supracitados, infere-se que a complexidade das operações de busca, inserção e remoção nas árvores AVL e LLRBT
+também ficam próximas a O(log(n)), visto que por se autobalancearem, ficam mais próximas estruturalmente de uma Árvore Binária
+Completa Cheia e tem suas operações favorecidas, em função de uma altura de cerca de 1,44 vezes maior na AVL e cerca de 2 vezes
+maior na LLBRT, em comparação com a altura mínima de uma arvoré completa cheia, dada por log(n+1)-1.
+
+ - PERTENCE:
+Para essa operação estamos fazendo uma busca simples do elemento pela árvore, o que pode ser equivalente a percorrer a altura 
+máxima da árvore. Conhecendo as propriedades de suas alturas, na RBT temos uma altura máxima percorrida de 2log(n), e na AVL
+temos 1,44log(n). Dessa forma, embora tenham complexidades assintóticas equivalentes de O(log(n)), a AVL possui um desempenho
+levemente melhor para essa operação. Assistoticamente, O(log(x)), sendo x o número de elementos.
+
+ - UNIÃO:
+Em ambas as estruturas, foi implementado o método da seguinte maneira: Faça um percurso pela árvore A, e adicione estes elementos
+em C, e repita o mesmo processo para B. Como as estruturas não permitem réplicas, isso resulta em uma união. Sabendo que esse
+processo depende criticamente da inserção na estrutura, é complicado avaliar a estrutura mais vantajosa, visto que são similares
+nesse atributo. Sendo n o tamanho de A e m o tamanho de B, temos uma complexidade final de O((n+m)log(n+m)). Considerando a altura
+máxima das duas árvores, e busca/inserção tendo número de comparações proporcionais a essa altura, podemos estipular as complexidades:
+AVL: O(1,44(n+m)log(n+m)).
+LLRBT: O(2(n+m)log(n+m)).
+Assintoticamnete O(x*log(x)), sendo x o número total de elementos.
+
+ - INTERSEÇÃO:
+Em ambas as estruturas, foi implementado o método da seguinte maneira: Faça um percurso pela árvore B, e verifique se cada elemento 
+está presente em A, para adicioná-lo em C caso esteja. Desta forma, a busca em A é crítica e a inserção é muito importante para a
+eficiência. Novamente, por conta dessas diversas nuances no método desenvolvido, é difícil de avaliar com certeza a estrutura mais
+vantajosa, visto que são similares nesse atributo e não é possível prever com exatidão o número de rotações apenas com base no tamanho
+da entrada, afinal, dependem da ordem em que os elementos são inseridos.
+-- A PARTIR DAQUI NÃO ENTENDI
 Sendo n o tamanho de A e m o tamanho de B, temos uma complexidade final de O(mlogn).
 Considerando a altura máxima das duas árvores, e busca/inserção tendo tendo número de comparações
 proporcionais a essa altura, podemos estipular as complexidades:
