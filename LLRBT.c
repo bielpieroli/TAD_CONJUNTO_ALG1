@@ -163,7 +163,7 @@ void percurso_em_ordem_aux(NODE *no){
 }
 
 //faz um percurso em ordem e printa seus elementos
-void percurso_em_ordem(RBT *tree){
+void RBT_imprimir(RBT *tree){
     if(!tree) return;
     printf("Percurso: ");
     percurso_em_ordem_aux(tree->raiz);
@@ -331,7 +331,7 @@ void RBT_intersec_aux(NODE *no, RBT *B, RBT *nova_arvore) {
 }
 
 //Retorna a intersecção entre os elementos de 2 árvores
-RBT *RBT_intersec(RBT *A, RBT *B) {
+RBT *RBT_intersecao(RBT *A, RBT *B) {
     if (!A || !B) return NULL; // Se uma das árvores é nula, a interseção é nula
 
     //criamos uma nova RBT para armazenar a intersecção

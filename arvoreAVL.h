@@ -49,7 +49,7 @@
 
     /// @brief A função "AVL_em_ordem" printa as chaves guardadas na árvore, fazendo o percurso em ordem e, consequentemente, printando-as em ordem crescente
     /// @param T 
-    void AVL_em_ordem(AVL *T);
+    void AVL_imprimir(AVL *T);
 
     bool AVL_vazia(AVL *T);
     int AVL_altura(AVL *T);

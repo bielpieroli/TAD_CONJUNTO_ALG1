@@ -163,7 +163,7 @@ void no_em_ordem(NO* no) {
 
 /// @brief A árvore AVL será percorrida em ordem
 /// @param avl 
-void AVL_em_ordem(AVL* avl) {
+void AVL_imprimir(AVL* avl) {
     if (avl != NULL) {
         no_em_ordem(avl->raiz);
         printf("\n");

@@ -35,7 +35,7 @@ SET *set_criar(unsigned char escolha) {
         set->inserir = (bool (*)(SET *, int))AVL_inserir;
         set->remover = (bool (*)(SET *, int))AVL_remover;
         set->pertence = (bool (*)(SET *, int))AVL_consulta;
-        set->imprimir = (void (*)(SET *))AVL_em_ordem;
+        set->imprimir = (void (*)(SET *))AVL_imprimir;
         set->apagar = (void (*)(SET **))AVL_apagar;
         set->uniao = (SET *(*)(SET *, SET *))AVL_uniao;
         set->intersecao = (SET *(*)(SET *, SET *))AVL_intersecao;
