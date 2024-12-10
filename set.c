@@ -46,7 +46,7 @@ SET *set_criar(unsigned char escolha) {
         set->inserir = (bool (*)(SET *, int))RBT_inserir;
         set->remover = (bool (*)(SET *, int))RBT_remover;
         set->pertence = (bool (*)(SET *, int))RBT_busca;
-        set->imprimir = (void (*)(SET *))RBT_imprimir_estrutura;
+        set->imprimir = (void (*)(SET *))RBT_imprimir;
         set->apagar = (void (*)(SET **))RBT_apagar;
         set->uniao = (SET *(*)(SET *, SET *))RBT_uniao;
         set->intersecao = (SET *(*)(SET *, SET *))RBT_intersecao;
