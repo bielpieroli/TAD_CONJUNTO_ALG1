@@ -357,3 +357,39 @@ RBT *RBT_intersecao(RBT *A, RBT *B) {
 
     return nova_arvore;
 }
+
+
+/// @brief Função auxiliar para imprimir espaços conforme o nível na árvore
+void print_espacos(int nivel) {
+    for (int i = 0; i < nivel; i++) {
+        printf("    ");
+    }
+}
+
+/// @brief Função recursiva para imprimir a estrutura da LLRBT visualmente.
+/// @param no Ponteiro para o nó atual
+/// @param nivel Nível atual da árvore
+void print_estrutura_rec(NODE *no, int nivel) {
+    if (no == NULL) {
+        print_espacos(nivel);
+        printf("~\n");
+        return;
+    }
+
+    // Imprime a subárvore direita primeiro (para efeito visual)
+    print_estrutura_rec(no->dir, nivel + 1);
+
+    // Imprime o nó atual e sua cor
+    print_espacos(nivel);
+    printf("%d(%s)\n", no->valor, no->cor == 1 ? "R" : "B");
+
+    // Imprime a subárvore esquerda
+    print_estrutura_rec(no->esq, nivel + 1);
+}
+
+/// @brief Função principal para iniciar a impressão da estrutura da LLRBT.
+/// @param arv Ponteiro para a árvore
+void RBT_imprimir_estrutura(RBT *arv) {
+    printf("Estrutura LLRBT:\n");
+    print_estrutura_rec(arv->raiz, 0);
+}

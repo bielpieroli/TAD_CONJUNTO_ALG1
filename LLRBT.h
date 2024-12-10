@@ -46,4 +46,7 @@
     /// @param B 
     /// @return RBT *, ou seja, o ponteiro para a Red Black Tree resultante da interseção
     RBT *RBT_intersecao(RBT *A, RBT *B);
+
+
+    void RBT_imprimir_estrutura(RBT *arv);
 #endif
