@@ -386,21 +386,21 @@ NO *AVL_no_remover(NO** raiz, int chave, bool *existe) {
     if (*raiz != NULL) {
         // A altura de cada nó é atualizada
         (*raiz)->alt = max(no_altura((*raiz)->esq), no_altura((*raiz)->dir)) + 1;
-        // Para este caso do fator de balanceamento, a árvore pende à direita, necessita-se de uma rotação à esquerda
+        // Para este caso do fator de balanceamento, a árvore pende à esquerda, necessita-se de uma rotação à direita
         if (fator_de_balanceamento(*raiz) >= 2) { 
-            // Caso o fator de balanceamento do filho à direita seja de igual sinal ou nulo, faz-se rotação simples à esquerda
+            // Caso o fator de balanceamento do filho à esquerda seja de igual sinal ou nulo, faz-se rotação simples à direita
             if (fator_de_balanceamento((*raiz)->esq) >= 0)
                 *raiz = rotacaoR(*raiz); 
-            // Do contrário, faz-se rotação dupla, à direita e, por fim, à esquerda
+            // Do contrário, faz-se rotação dupla, à esquerda e, por fim, à direita
             else
                 *raiz = rotacaoLR(*raiz); 
         }
-        // Para este caso do fator de balanceamento, a árvore pende à esquerda, necessita-se de uma rotação à direita
+        // Para este caso do fator de balanceamento, a árvore pende à direita, necessita-se de uma rotação à esquerda
         if (fator_de_balanceamento(*raiz) <= -2) { 
-            // Caso o fator de balanceamento do filho à esquerda seja de igual sinal ou nulo, faz-se rotação simples à direita
+            // Caso o fator de balanceamento do filho à direita seja de igual sinal ou nulo, faz-se rotação simples à esquerda
             if (fator_de_balanceamento((*raiz)->dir) <= 0)
                 *raiz = rotacaoL(*raiz); 
-             // Do contrário, faz-se rotação dupla, à esquerda e, por fim, à direita
+             // Do contrário, faz-se rotação dupla, à direita e, por fim, à esquerda
             else
                 *raiz = rotacaoRL(*raiz); 
         }

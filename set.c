@@ -18,21 +18,20 @@ struct SET_ {
     
 }; 
 
-    // Parâmetro 'escolha': 
-    //    - 0 para implementar o conjunto com Árvore AVL
-    //    - 1 para implementar o conjunto com Red-Black Tree
-    
-/// @brief Função que cria o SET segundo a escolha do usuário, definindo os campos de ponteiros para funções da struct, de acordo com a implementação desejada
-/// @param escolha 
-/// @return SET *, ou seja, o SET criado, com todas as funções definidas segundo a implementação almejada 
+// Parâmetro 'escolha': 
+//    - 0 para implementar o conjunto com Árvore AVL
+//    - 1 para implementar o conjunto com Red-Black Tree
+
+// Função que cria o SET, definindo os campos de ponteiros para funções da struct e a implementação, de acordo com a estrutura desejada
+// Retorna SET *, isto é, o conjunto e as funções atreladas à estrutura escolhida
 SET *set_criar(unsigned char escolha) {
     SET *set = malloc(sizeof(SET));
     if (set == NULL) {
         printf("Erro ao alocar memória\n");
         return NULL;
     }
-
-    if (escolha == 0) { // Implementação com AVL
+    // Implementação com AVL
+    if (escolha == 0) { 
         set->inserir = (bool (*)(SET *, int))AVL_inserir;
         set->remover = (bool (*)(SET *, int))AVL_remover;
         set->pertence = (bool (*)(SET *, int))AVL_consulta;
@@ -42,7 +41,8 @@ SET *set_criar(unsigned char escolha) {
         set->intersecao = (SET *(*)(SET *, SET *))AVL_intersecao;
         set->implementacao = AVL_criar();
         set->tipo = 0;
-    } else if (escolha == 1) { // Implementação com Red-Black Tree
+    // Implementação com Red-Black Tree
+    } else if (escolha == 1) { 
         set->inserir = (bool (*)(SET *, int))RBT_inserir;
         set->remover = (bool (*)(SET *, int))RBT_remover;
         set->pertence = (bool (*)(SET *, int))RBT_busca;
@@ -58,8 +58,7 @@ SET *set_criar(unsigned char escolha) {
     return set;
 }
 
-/// @brief Função que a implementação da função de apagar da estrutura desejada
-/// @param set 
+// Função que a implementação da função de apagar da estrutura desejada
 void set_apagar(SET **set) {
     if (*set != NULL) {
          (*set)->apagar((SET **)&(*set)->implementacao); 
@@ -69,34 +68,22 @@ void set_apagar(SET **set) {
     }
 }
 
-/// @brief Função que chama a implementação da função de inserção da estrutura desejada
-/// @param set 
-/// @param elemento 
-/// @return bool, ou seja, se o elemento foi possível ou não inserir o elemento
+// Função que chama a implementação da função inserção da estrutura desejada, retornando true caso consiga e false caso não.
 bool set_inserir(SET *set, int elemento) {
     return set->inserir(set->implementacao, elemento);
 }
 
-/// @brief Função que chama a implementação da função remoção da estrutura desejada
-/// @param set 
-/// @param elemento 
-/// @return bool, ou seja, se o elemento foi possível ou não remover o elemento
+// Função que chama a implementação da função remoção da estrutura desejada, retornando true caso consiga e false caso não.
 bool set_remover(SET *set, int elemento) {
     return set->remover(set->implementacao, elemento);
 }
 
-/// @brief Função que chama a implementação de busca da estrutura desejada
-/// @param set 
-/// @param elemento 
-/// @return bool, ou seja, se o elemento foi ou não encontrado dentro do conjunto
+// Função que chama a implementação de busca da estrutura desejada, retornando true caso consiga e false caso não.
 bool set_pertence(SET *set, int elemento) {
     return set->pertence(set->implementacao, elemento);
 }
 
-/// @brief Função que chama a implementação da função de união da estrutura desejada
-/// @param A 
-/// @param B 
-/// @return SET *, isto é, o ponteiro para o SET resultante da união entre os dois conjuntos
+// Função que chama a implementação da função de união da estrutura desejada, retornando SET *, isto é, o ponteiro para o SET resultante
 SET *set_uniao(SET *A, SET *B) {
     SET *newset;
     newset = set_criar(A->tipo);
@@ -106,10 +93,7 @@ SET *set_uniao(SET *A, SET *B) {
     return newset;
 }
 
-/// @brief Função que chama a implementação da função de interseção da estrutura desejada
-/// @param A 
-/// @param B 
-/// @return SET *, isto é, o ponteiro para o SET resultante da interseção entre os dois conjuntos
+// Função que chama a implementação da função de interseção da estrutura desejada, retornando SET *, isto é, o ponteiro para o SET resultante
 SET *set_intersecao(SET *A, SET *B) {
     SET *newset;
     newset = set_criar(A->tipo);
@@ -119,8 +103,7 @@ SET *set_intersecao(SET *A, SET *B) {
     return newset;
 }
 
-/// @brief Função que chama a implementação da função de imprimir da estrutura desejada
-/// @param set 
+// Função que chama a implementação da função de imprimir da estrutura desejada
 void set_imprimir(SET *set) {
     set->imprimir(set->implementacao);
 }
