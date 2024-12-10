@@ -165,7 +165,7 @@ bool RBT_inserir(RBT *tree, int dado) {
 void percurso_em_ordem_aux(NODE *no){
     if(!no) return;
     percurso_em_ordem_aux(no->esq);
-    printf("%d ", no->valor);
+    printf("%d, ", no->valor);
     percurso_em_ordem_aux(no->dir);
 }
 

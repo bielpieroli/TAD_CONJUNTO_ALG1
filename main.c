@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         case 1: // PERTERCE
         {
             scanf("%d", &x);
-            set_pertence(A,x) ? printf("Pertence.\n") : printf("Não pertence.\n");
+            set_pertence(A,x) ? printf("Pertence.\n") : printf("Nao pertence.\n");
             break;
         }
         case 2: // UNIÃO

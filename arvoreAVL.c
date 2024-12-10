@@ -162,7 +162,7 @@ void no_em_ordem(NO* no) {
         return;
     no_em_ordem(no->esq);
     //printf("Nó %d: Altura(%d), Fator de Balanceamento(%d)\n", no->chave, no->alt, fator_de_balanceamento(no));
-    printf("%d ", no->chave);
+    printf("%d, ", no->chave);
     no_em_ordem(no->dir);
 }
 
