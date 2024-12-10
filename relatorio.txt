@@ -17,8 +17,8 @@ Apesar de tudo, a rotação e inserção na AVL são muito semelhantes em efici�
 
 Árvore AVL
 A Árvore AVL é uma estrutura de dados que garante um balanceamento estrito, mantendo a diferença
-de altura entre subárvores adjacentes sempre menor ou igual a 1. Devido ao balanceamento mais 
-rigoroso, a AVL Tree tem desempenho levemente melhor em operações de busca, pois a altura é minimizada.
+de altura entre subárvores adjacentes sempre menor ou igual a 1. Devido ao balanceamento mais rigoroso, 
+a AVL Tree tem desempenho levemente melhor em operações de busca, pois a altura é minimizada (1,44log(n)).
 É ideal para situações onde a frequência de consultas (buscas) é maior que a de inserções e remoções.
 
 
@@ -30,7 +30,7 @@ dos elementos.
 PERTENCE:
 Para essa operação estamos fazendo uma busca simples do elemento pela árvore, o que pode ser equivalente
 a percorrer a altura máxima da árvore. Conhecendo as propriedades de suas alturas, na RBT temos uma 
-altura máxima percorrida de 2log(n), e na AVL temos log(n)+1. Dessa forma, embora tenham complexidades
+altura máxima percorrida de 2log(n), e na AVL temos 1,44log(n). Dessa forma, embora tenham complexidades
 assintóticas equivalentes de O(log(n)), a AVL possui um desempenho levemente melhor para essa operação.
 
 UNIÃO:
@@ -38,12 +38,21 @@ Em ambas as estruturas, foi implementado o método da seguinte maneira: Faça um
 e adicione estes elementos em C, e repita o mesmo processo para B. Como as estruturas não permitem
 réplicas, isso resulta em uma união. Sabendo que esse processo depende criticamente da inserção na
 estrutura, é complicado avaliar a estrutura mais vantajosa, visto que são similares nesse atributo.
-Sendo n o tamanho de A e m o tamanho de B, temos uma complexidade final de O(mlogm +nlogn).
+Sendo n o tamanho de A e m o tamanho de B, temos uma complexidade final de O((m+n)log(n+m)).
+Considerando a altura máxima das duas árvores, e busca/inserção tendo tendo número de comparações
+proporcionais a essa altura, podemos estipular as complexidades:
+AVL: O(1,44(m+n)log(n+m)).
+LLRBT: O(2(m+n)log(n+m)).
 
 INTERSEÇÃO:
 Em ambas as estruturas, foi implementado o método da seguinte maneira: Faça um percurso pela árvore B,
 e verifique se cada elemento está presente em A, para adicioná-lo em C caso esteja. Desta forma, a busca
 em A é crítica e a inserção é muito importante para a eficiência.
 Novamente, por conta dessas diversas nuances no método desenvolvido, é difícil de avaliar com certeza 
-a estrutura mais vantajosa, visto que são similares nesse atributo.
+a estrutura mais vantajosa, visto que são similares nesse atributo e não é possível prever com exatidão
+o número de rotações apenas com base no tamanho da entrada.
 Sendo n o tamanho de A e m o tamanho de B, temos uma complexidade final de O(mlogn).
+Considerando a altura máxima das duas árvores, e busca/inserção tendo tendo número de comparações
+proporcionais a essa altura, podemos estipular as complexidades:
+AVL: O(1,44*mlog(n)).
+LLRBT: O(2*mlog(n)).
