@@ -94,6 +94,7 @@ int fator_de_balanceamento(NO* no) {
     return (no_altura(no->esq) - no_altura(no->dir));
 }
 
+/*
 /// @brief Função que verifica se a estrutura AVL não é vazia
 /// @param avl 
 /// @return true: se a estrutura AVL ou a raiz NO é nula. false: caso contrário.
@@ -124,6 +125,7 @@ int AVL_total(AVL *T) {
     }
     return 0;
 }
+*/
 
 /// @brief Função auxiliar que verifica a altura do nó raiz, indicando a profundidade da AVL
 /// @param avl 
@@ -134,6 +136,8 @@ int AVL_altura(AVL* avl) {
     return avl->raiz->alt;
 }
 
+
+/*
 /// @brief Percurso dos nós da árvore em pré-ordem: 1) Visita 2) Pecorre recursivamente à esquerda 3) Percorre recursivamente à direita
 /// @param no 
 void no_pre_ordem(NO* no) {
@@ -149,6 +153,7 @@ void AVL_pre_ordem(AVL* avl) {
     if (avl != NULL)
         no_pre_ordem(avl->raiz);
 }
+*/
 
 /// @brief Percurso dos nós da árvore em ordem: 1) Pecorre recursivamente à esquerda 2) Visita 3) Percorre recursivamente à direita
 /// @param no 
@@ -170,6 +175,7 @@ void AVL_imprimir(AVL* avl) {
     }
 }
 
+/*
 /// @brief Percurso dos nós da árvore em pós-ordem: 1) Pecorre recursivamente à esquerda 2) Percorre recursivamente à direita 3) Visita
 /// @param no 
 void no_pos_ordem(NO* no) {
@@ -186,6 +192,7 @@ void AVL_pos_ordem(AVL* avl) {
     if (avl != NULL)
         no_pos_ordem(avl->raiz);
 }
+*/
 
 /// @brief Função que realiza a Rotação Esquerda
 /// @param A 
@@ -438,7 +445,7 @@ bool AVL_remover(AVL* avl, int chave) {
 /// @param no 
 /// @param chave 
 /// @return false: se a chave não existia. true: se a chave existia 
-bool no_consulta(NO* no, int chave) {
+bool AVL_no_consulta(NO* no, int chave) {
     while (no != NULL) {
         if (chave == no->chave)
             return true;
@@ -457,7 +464,7 @@ bool no_consulta(NO* no, int chave) {
 bool AVL_consulta(AVL* avl, int chave) {
     if (avl == NULL || avl->raiz == NULL)
         return false;
-    return no_consulta(avl->raiz, chave);
+    return AVL_no_consulta(avl->raiz, chave);
 }
 
 NO* no_inserir_uniao(AVL *C, NO *elemento) {
@@ -526,6 +533,7 @@ AVL *AVL_intersecao(AVL *A, AVL *B) {
     return C;
 }
 
+/*
 /// @brief Função auxiliar que contabiliza os espaços por nível
 /// @param nivel 
 void print_espacos(int nivel) {
@@ -555,3 +563,4 @@ void print_arvore(AVL *T) {
     printf("Árvore AVL:\n");
     print_estrutura(T->raiz, 0);
 }
+*/
