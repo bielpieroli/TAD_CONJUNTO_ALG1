@@ -11,6 +11,6 @@ LLRBT.o:
 arvoreAVL.o:
 	gcc -c arvoreAVL.c -o arvoreAVL.o
 clean:
-	rm -f *.o main conjunto.zip
+	rm -f *.o main.exe conjunto.zip
 zip:
 	zip -r conjunto.zip *

@@ -94,7 +94,6 @@ está presente em A, para adicioná-lo em C caso esteja. Desta forma, a busca em
 eficiência. Novamente, por conta dessas diversas nuances no método desenvolvido, é difícil de avaliar com certeza a estrutura mais
 vantajosa, visto que são similares nesse atributo e não é possível prever com exatidão o número de rotações apenas com base no tamanho
 da entrada, afinal, dependem da ordem em que os elementos são inseridos.
--- A PARTIR DAQUI NÃO ENTENDI
 Sendo n o tamanho de A e m o tamanho de B, temos uma complexidade final de O(mlogn + mlogm) = O(mlog(nm)), considerando que para cada um
 dos m elementos, será feita uma busca no conjunto A de tamanho n, e então uma inserção em um conjunto de tamanho 
 máximo m.
@@ -102,3 +101,6 @@ Considerando a altura máxima das duas árvores, e busca/inserção tendo tendo 
 proporcionais a essa altura, podemos estipular as complexidades:
 AVL: O(1,44*mlog(mn)).
 LLRBT: O(2*mlog(mn)).
+
+ * PARA USAR O TESTAR.SH, UTILIZE NO TERMINAL LINUX:
+make teste
