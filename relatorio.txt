@@ -10,7 +10,7 @@ Justificativa para a escolha das estruturas de dados:
 
 Red-Black Tree
 A Red-Black Tree é uma estrutura de dado que mantém um balanceamento próximo ao ideal, 
-garantindo que a profundidade da árvore seja no máximo 2*log(n).
+garantindo que a profundidade da árvore seja no máximo 2*log(n). 
 É possível argumentar que as operações de inserção e remoção têm desempenho eficiente devido 
 à sua estratégia de balanceamento menos rigorosa, o que pode resultar em menos rotações comparado à AVL.
 Apesar de tudo, a rotação e inserção na AVL são muito semelhantes em eficiência na prática.
