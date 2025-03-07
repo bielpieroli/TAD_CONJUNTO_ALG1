@@ -1,9 +1,10 @@
 # TAD Conjunto com Árvores Balanceadas (AVL e LLRBT)  
 # Balanced Tree Set ADT (AVL and LLRBT)
 
-Este projeto implementa um **Tipo Abstrato de Dados (TAD)** para manipulação de conjuntos utilizando duas estruturas de dados balanceadas: **Árvore AVL** e **Left-Leaning Red-Black Tree (LLRBT)**. O projeto foi desenvolvido como parte da disciplina de Algoritmos e Estruturas de Dados, com o objetivo de explorar operações eficientes com Conjuntos, como pertinência, união, interseção e remoção.
+Este projeto implementa um **Tipo Abstrato de Dados (TAD)** para manipulação de conjuntos utilizando duas estruturas de dados balanceadas: **Árvore AVL** e **Left-Leaning Red-Black Tree (LLRBT)**. O projeto foi desenvolvido como parte da disciplina de Algoritmos e Estruturas de Dados, com o objetivo de explorar operações eficientes com Conjuntos, como pertinência, união, interseção e remoção. Além disso, prezamos pela automação de vários processos, como compilação, execução e testagem, com um bash script.
 
-This project implements an **Abstract Data Type (ADT)** for set manipulation using two balanced data structures: **AVL Tree** and **Left-Leaning Red-Black Tree (LLRBT)**. It was developed as part of the Algorithms and Data Structures subject, aiming to explore efficient set operations such as membership, union, intersection, and removal.
+This project implements an Abstract Data Type (ADT) for set manipulation using two balanced data structures: AVL Tree and Left-Leaning Red-Black Tree (LLRBT). It was developed as part of the Algorithms and Data Structures course, aiming to explore efficient set operations such as membership, union, intersection, and removal. Futhermore, we value the automation of various processes, such as compilation, execution, and testing, through a bash script.
+
 
 ---
 
